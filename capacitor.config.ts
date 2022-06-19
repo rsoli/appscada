@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.ende.scada',
   appName: 'Scada',
   webDir: 'www',
   bundledWebRuntime: false

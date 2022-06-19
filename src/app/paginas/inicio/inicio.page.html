@@ -1,0 +1,127 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-icon name="menu-outline" slot="start" style="zoom:2.5;"></ion-icon>
+    <ion-title class="ion-text-center">Bienvenido</ion-title>
+    <ion-icon name="notifications-outline" slot="end" style="zoom:2.2;"></ion-icon>
+  </ion-toolbar>
+</ion-header> 
+
+<ion-content>
+
+  <!-- <div style="position: relative;height: 100px;background: blue;">
+    hola
+  </div> -->
+
+  <div style="height: 250px;background: linear-gradient(#0c287e, #2548b1);  ;position: relative;">
+    <div>
+      <ion-img class="img_menu"  src="./assets/icon/logo_blanco.png"></ion-img>
+    </div>
+    <!-- <div style="color: white;text-align: center;padding-top: 30px;font-size: 15px;font-family: Verdana;">Bienvenido</div> -->
+    <div style="text-align: center;color:white;font-size: 15px;margin-top: 15PX;font-family: Verdana;">Empresa Nacional de Eléctricidad</div>
+    <div style="text-align: center;color:white;font-size: 15px;margin-top: 0PX;font-family: Verdana;">SCADA</div>
+  </div>
+
+ 
+
+
+  <div style="position: absolute; top: 0; left: 0; margin-top: 160px;">
+
+    <ion-list style="background:rgba(255, 255, 255, 0)">
+    
+      <!-- <ion-item *ngFor="let c of componentes">
+        {{c.name}}
+      </ion-item> -->
+      <!-- <ion-button routerLink="/fallas">Fallas</ion-button> 
+        -->
+  
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/fallas">
+                  <div>
+                    <ion-img class="img_menu"  src="./assets/icon/alto-voltaje.png"></ion-img>
+                  </div>
+                  <div class="text_menu">
+                    Fallas
+                  </div>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/deuda">
+                <div>
+                  <ion-img class="img_menu"  src="./assets/icon/dinero.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Deudas
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      
+        <ion-row>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/turno">
+                <div>
+                  <ion-img class="img_menu"  src="./assets/icon/trabajador.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Turnos
+                </div>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/estadistica">
+                <div>
+                  <ion-img class="img_menu"  src="./assets/icon/estadisticas.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Estadistica
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+  
+        <ion-row>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/mantenimiento">
+                <div>
+                  <ion-img class="img_menu"  src="./assets/icon/mantenimiento.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Mantenimiento
+                </div>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2">
+                <div>
+                  <ion-img class="img_menu"  src="./assets/icon/evento.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Eventos
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+  
+      </ion-grid>
+  
+    </ion-list>
+
+  </div>
+
+
+
+</ion-content>

@@ -1,0 +1,220 @@
+
+
+<!-- <app-header titulo="Lista de fallas"></app-header> -->
+
+<ion-header style="border-bottom: 0px solid #fff;">
+    <ion-toolbar style="height: 60px;">
+  
+  
+      <ion-buttons slot="start">
+        <ion-back-button icon="arrow-back-outline" style="color: white ;" defaultHref="/" text=""  mode="ios"> </ion-back-button> 
+      </ion-buttons>
+  
+  
+      <div style="text-align: center;margin-top: 5px;">
+        <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+      </div>
+  
+      <ion-buttons slot="end">
+
+        <div style="margin-top: 0px;text-align: right;">
+
+
+            <!-- <ion-input [value]="dateValue2"></ion-input> -->
+
+            <ion-button fill="clear" id="open-date-input-2" style="margin-top: 0px;zoom:1.1;">
+                <ion-icon name="calendar-clear-sharp"></ion-icon>
+            </ion-button>
+            <ion-popover trigger="open-date-input-2" show-backdrop="false">
+                <ng-template>
+                    <ion-datetime  displayFormat="D-MMMM-YYYY"
+                    #popoverDatetime2
+                    presentation="date"
+                    (ionChange)="dateValue2 = formatDate(popoverDatetime2.value)"
+                    ></ion-datetime>
+                </ng-template>
+            </ion-popover>
+
+            
+
+
+            
+
+        </div>
+
+        <!-- <div>
+          <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+        </div> -->
+          <!-- <ion-icon name="notifications-outline" style="zoom:2.0;"></ion-icon> -->
+      </ion-buttons>
+  
+      <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
+  
+    </ion-toolbar>
+  
+  
+  
+  
+  </ion-header>
+  
+  <div style="background: #fff;">
+    
+    <ion-row>
+        <ion-col size="3">
+
+        </ion-col>
+        <ion-col size="6">
+            <div style="text-align: center;color:black;font-size: 12px;margin-top: 0px;padding: 8px;font-family: Verdana;"> 
+                Lista de fallas
+            </div>
+        </ion-col>
+        <ion-col size="3">
+
+
+
+            
+        </ion-col>
+    </ion-row>
+
+  </div>
+
+
+
+<ion-content>
+
+        
+        <ion-list>
+            <div style="background: #fff;">
+                <ion-row *ngFor="let item of lista_fallas" >
+                    <ion-col size="12">
+                        <div class="btnprincipal" 
+                        style="
+                        margin-top: 4px; 
+                        margin-bottom: 4px; 
+                        margin-left: 8px; 
+                        margin-right: 8px; 
+
+                        background:#fff;
+                        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+                        "
+                        >
+                            
+                            <ion-row>             
+                                <ion-col size="12">
+                                    <div style="padding: 10px;">
+                                        <ion-row class="linea_separador">
+                                                <ion-col size="2" style="font-size:12px;">
+        
+                                                    <!-- <div style="font-weight: bold;font-size: 10px;color: #67ad90;text-align: right;padding-bottom: 5px;" *ngIf="item.conreconexion == '0' ">
+                                                        Con conexión
+                                                    </div>
+                                                    <div style="font-weight: bold;font-size: 10px;color: #67ad90;text-align: right;padding-bottom: 5px;" *ngIf="item.conreconexion =='1' ">
+                                                        Sin conexión
+                                                    </div>-->
+
+                                                    <div style="width: 40px;" *ngIf="item.conreconexion == '0' " >
+                                                        <ion-img class="img_menu"  src="./assets/icon/desconectado.png"></ion-img>
+                                                    </div>
+                                                    <div style="width: 40px;" *ngIf="item.conreconexion == '1' " >
+                                                        <ion-img class="img_menu"  src="./assets/icon/conectado.png"></ion-img>
+                                                    </div>
+                                                </ion-col>
+                                                <ion-col size="10" style="font-size:12px;">
+                                                    <div style="font-weight: bold;font-size: 11px;color: #616161;">
+                                                        Detalle de la Falla
+                                                    </div> 
+                                                    <div style="font-size: 11px;padding-top: 4px;" class="tarjeta-descripcion">
+                                                        {{item.detallecausa}}
+                                                    </div>
+                                                </ion-col>
+                                        </ion-row>
+                                        <ion-row class="linea_separador">
+                                            <ion-col size="6">
+                                               
+                                                <div  class="tarjeta-titulo">
+                                                    Nombre COT
+                                                </div>
+                                                <div class="tarjeta-descripcion" >
+                                                    {{item.nombrecot}}
+                                                </div>
+                                                <div  class="tarjeta-titulo">
+                                                    Distancia
+                                                </div>
+                                                <div class="tarjeta-descripcion" >
+                                                    {{item.distancia}}
+                                                </div>
+                                            </ion-col>
+        
+                                            <ion-col size="6">
+                                                <div class="tarjeta-titulo">
+                                                    Subestación
+                                                </div>
+                                                <div class="tarjeta-descripcion">
+                                                    {{item.subestacion}}
+                                                </div>
+                                                <div class="tarjeta-titulo">
+                                                    Fase
+                                                </div>
+                                                <div class="tarjeta-descripcion">
+                                                    {{item.fase}}
+                                                </div>
+                                            
+                                            </ion-col>
+                                        </ion-row>
+                                        <ion-row>
+        
+                                            <ion-col size="5">
+                                                <div class="tarjeta-titulo">
+                                                    Fecha del evento
+                                                </div>
+                                                <div style="color: #1639A3;font-weight: bold;font-size: 10px;">
+                                                    {{item.fechahoraevento}}
+                                                </div>
+                                            </ion-col>
+                              
+                                            <ion-col size="7">
+                                                <ion-row>
+                                                    <ion-col size="4">
+                                                        <div class="tarjeta-titulo">
+                                                            Informe
+                                                        </div>
+                                                    </ion-col>
+                                                    <ion-col size="8">
+                                                        <div style="color: white;font-weight: bold;font-size: 10px;background: #1639A3;padding: 5px;text-align: center;">
+                                                            {{item.nroinforme}}
+                                                        </div>
+                                                    </ion-col>
+
+                                                </ion-row>
+
+                                               
+                                            
+                                            </ion-col>
+                                        </ion-row>
+                                    </div>
+                                </ion-col>
+                            </ion-row>
+        
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </div>
+
+            <div style="padding-top: 3px;padding-right: 20px;padding-bottom: 3px;background: linear-gradient(#2548b1 ,#0c287e );text-align: center; ">
+                <ion-row>
+                    <ion-col size="12" style="width: 0px;">
+                        <ion-row>
+                            <ion-col size="1" class="paginador" (click)="pagina_inicio()"><ion-icon name="play-back-outline"  class="icono-paginador"></ion-icon></ion-col>
+                            <ion-col size="1" class="paginador" (click)="pagina_anterior()"><ion-icon name="chevron-back-outline" class="icono-paginador"></ion-icon></ion-col>
+                            <ion-col size="8" class="paginador">Página {{contador_pagina}} de {{cantidad_pagina}}</ion-col>
+                            <ion-col size="1" class="paginador" (click)="pagina_siguiente()"><ion-icon name="chevron-forward-outline" class="icono-paginador"></ion-icon></ion-col>
+                            <ion-col size="1" class="paginador" (click)="pagina_final()"><ion-icon name="play-forward-outline" class="icono-paginador"></ion-icon></ion-col>
+                            
+                        </ion-row>
+                    </ion-col>
+                </ion-row>
+            </div>
+            
+        </ion-list>
+    
+</ion-content>

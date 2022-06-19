@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Platform } from '@ionic/angular';
+import { PushService } from './servicio/push.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,19 @@ import { Component } from '@angular/core';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor() {}
+  constructor(
+    private platform: Platform,
+    private servicio_push: PushService
+  ) {
+    this.IniciarPush();
+  }
+  IniciarPush(){
+    this.platform.ready().then(() => {
+      //this.statusBar.styleDefault();
+      //this.splashScreen.hide();
+      this.servicio_push.configuracionInicial();
+    });
+    
+  }
+
 }
