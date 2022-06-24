@@ -40,5 +40,23 @@ export class MantenimientosService {
     }
    
   }
+  get_turnos(start:number,limit:number,fecha_inicio:string){ 
+    //let start=0;
+    //let limit=10;
+    //const parametros=JSON.stringify([{'start':start,'limit':limit}]);
+    try {
+      this.actualizar_accesos();
+      let parametros = '?start='+start+'&limit='+limit+'&fecha_inicio='+fecha_inicio;
+      console.log("ver url ",this.baseURL+ 'listarTurnos');
+      //return this.http.get(this.baseURL + 'listarMantenimientoNotificacion'+parametros, { this.headers_token});
+  
+      return this.http.post(this.baseURL + 'listarTurnos'+parametros, {}, {headers:this.headers_token} );
+
+      
+    } catch (error) {
+      console.log("ver erores ",error);
+    }
+   
+  }
 
 }

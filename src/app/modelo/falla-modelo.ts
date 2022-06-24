@@ -5,14 +5,17 @@ export class FallaModelo {
     cerrado:String="";
     nombrecot:String="";
 
-    nombre:String="";
     conreconexion:String="";
     detallecausa:String="";
     causa:String="";
 
-    subestacion:String="";
-    distancia:String="";
-    fase:String="";
+    subestacion1:String="";
+    subestacion2:String="";
+    distancia1:String="";
+    distancia2:String="";
+    fase1:String="";
+    fase2:String="";
+    detalle_falla:String="";
 
 }
 

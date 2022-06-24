@@ -12,6 +12,7 @@ export class AppComponent {
     private platform: Platform,
     private servicio_push: PushService
   ) {
+    
     this.IniciarPush();
   }
   IniciarPush(){

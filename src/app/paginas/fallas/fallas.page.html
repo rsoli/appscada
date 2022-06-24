@@ -1,9 +1,7 @@
 
 
-<!-- <app-header titulo="Lista de fallas"></app-header> -->
-
 <ion-header style="border-bottom: 0px solid #fff;">
-    <ion-toolbar style="height: 60px;">
+    <ion-toolbar>
   
   
       <ion-buttons slot="start">
@@ -11,42 +9,14 @@
       </ion-buttons>
   
   
-      <div style="text-align: center;margin-top: 5px;">
+      <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;">
         <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
       </div>
   
-      <ion-buttons slot="end">
-
-        <div style="margin-top: 0px;text-align: right;">
-
-
-            <!-- <ion-input [value]="dateValue2"></ion-input> -->
-
-            <ion-button fill="clear" id="open-date-input-2" style="margin-top: 0px;zoom:1.1;">
-                <ion-icon name="calendar-clear-sharp"></ion-icon>
-            </ion-button>
-            <ion-popover trigger="open-date-input-2" show-backdrop="false">
-                <ng-template>
-                    <ion-datetime  displayFormat="D-MMMM-YYYY"
-                    #popoverDatetime2
-                    presentation="date"
-                    (ionChange)="dateValue2 = formatDate(popoverDatetime2.value)"
-                    ></ion-datetime>
-                </ng-template>
-            </ion-popover>
-
-            
-
-
-            
-
-        </div>
-
-        <!-- <div>
-          <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
-        </div> -->
-          <!-- <ion-icon name="notifications-outline" style="zoom:2.0;"></ion-icon> -->
-      </ion-buttons>
+      <ion-button slot="end" (click)="abrir_filtros()" fill="clear" id="open-date-input-2" >
+        <!-- <ion-icon name="calendar-clear-sharp"></ion-icon> -->
+        <ion-icon name="funnel" style="color:white;"></ion-icon>
+    </ion-button> 
   
       <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
   
@@ -59,24 +29,18 @@
   
   <div style="background: #fff;">
     
-    <ion-row>
-        <ion-col size="3">
-
-        </ion-col>
-        <ion-col size="6">
-            <div style="text-align: center;color:black;font-size: 12px;margin-top: 0px;padding: 8px;font-family: Verdana;"> 
-                Lista de fallas
-            </div>
-        </ion-col>
-        <ion-col size="3">
-
-
-
-            
-        </ion-col>
-    </ion-row>
-
+    <div style="text-align: center;color:rgb(75, 70, 70);font-size: 12px;margin-top: 7px;padding: 8px;font-family: Segoe;font-weight: bold;"> 
+      LISTA DE FALLAS
+    </div>
+  
   </div>
+
+
+
+
+
+  
+
 
 
 
@@ -121,7 +85,7 @@
                                                 </ion-col>
                                                 <ion-col size="10" style="font-size:12px;">
                                                     <div style="font-weight: bold;font-size: 11px;color: #616161;">
-                                                        Detalle de la Falla
+                                                        {{item.nombrecot}}
                                                     </div> 
                                                     <div style="font-size: 11px;padding-top: 4px;" class="tarjeta-descripcion">
                                                         {{item.detallecausa}}
@@ -129,45 +93,23 @@
                                                 </ion-col>
                                         </ion-row>
                                         <ion-row class="linea_separador">
-                                            <ion-col size="6">
+                                            <ion-col size="12">
                                                
                                                 <div  class="tarjeta-titulo">
-                                                    Nombre COT
+                                                    Detalle de la falla
                                                 </div>
                                                 <div class="tarjeta-descripcion" >
-                                                    {{item.nombrecot}}
+                                                    {{item.detalle_falla}}
                                                 </div>
-                                                <div  class="tarjeta-titulo">
-                                                    Distancia
-                                                </div>
-                                                <div class="tarjeta-descripcion" >
-                                                    {{item.distancia}}
-                                                </div>
-                                            </ion-col>
-        
-                                            <ion-col size="6">
-                                                <div class="tarjeta-titulo">
-                                                    Subestación
-                                                </div>
-                                                <div class="tarjeta-descripcion">
-                                                    {{item.subestacion}}
-                                                </div>
-                                                <div class="tarjeta-titulo">
-                                                    Fase
-                                                </div>
-                                                <div class="tarjeta-descripcion">
-                                                    {{item.fase}}
-                                                </div>
-                                            
                                             </ion-col>
                                         </ion-row>
                                         <ion-row>
         
                                             <ion-col size="5">
                                                 <div class="tarjeta-titulo">
-                                                    Fecha del evento
+                                                    <!-- Fecha del evento  -->
                                                 </div>
-                                                <div style="color: #1639A3;font-weight: bold;font-size: 10px;">
+                                                <div style="color: #1639A3;font-weight: bold;font-size: 10px;padding-top: 4px;">
                                                     {{item.fechahoraevento}}
                                                 </div>
                                             </ion-col>
@@ -175,9 +117,9 @@
                                             <ion-col size="7">
                                                 <ion-row>
                                                     <ion-col size="4">
-                                                        <div class="tarjeta-titulo">
+                                                        <!-- <div class="tarjeta-titulo">
                                                             Informe
-                                                        </div>
+                                                        </div> -->
                                                     </ion-col>
                                                     <ion-col size="8">
                                                         <div style="color: white;font-weight: bold;font-size: 10px;background: #1639A3;padding: 5px;text-align: center;">
@@ -218,3 +160,80 @@
         </ion-list>
     
 </ion-content>
+
+
+
+<ion-modal [isOpen]="isModalOpen" [canDismiss]="canDismiss" >
+    <ng-template >
+
+
+        <ion-header style="border-bottom: 0px solid #fff;">
+            <ion-toolbar>
+          
+            <ion-row>
+                <ion-col size="3">
+                    <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+                </ion-col>
+                <ion-col size="6">
+                    <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;padding-top: 10px;color:white;font-family: Segoe;font-weight: bold;">
+                        FILTROS          
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                    
+                </ion-col>
+            </ion-row>
+         
+          
+
+          
+          
+              <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
+          
+            </ion-toolbar>
+          
+          </ion-header>
+
+        <!-- <div style="background: linear-gradient(#0c287e, #2548b1);text-align: center;color:white;font-size: 12px;padding: 8px;padding-top: 25px;padding-bottom: 10px;font-family: Segoe;font-weight: bold;"> 
+            <ion-row>
+                <ion-col size="3">
+                    <div style="text-align: left;">
+                        <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+                    </div>
+
+                </ion-col>
+                <ion-col size="6">
+                    <div style="padding-top: 20px;">
+                        FILTROS
+                    </div>
+                    
+                </ion-col>
+                <ion-col size="3"></ion-col>
+            </ion-row>
+            
+        </div> -->
+        <ion-content>
+ 
+
+            <ion-row>
+                <ion-col size="12"> 
+                    <div style="margin-left: 9px;text-align: left;color:rgb(75, 70, 70);font-size: 16px;margin-top: 7px;padding: 8px;font-family: Segoe;font-weight: bold;">
+                        Fecha de falla
+                    </div>
+                    
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12"> 
+                    <div style="text-align: center;">
+                        <ion-datetime presentation="date" displayFormat="DD/MM/YYYY" [(ngModel)]="fecha_hora_evento"></ion-datetime> 
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-content>
+
+        <ion-button color="primary" style="--ion-color-primary: #1639A3;padding-left: 10px;padding-right: 10px;height: 40px;" (click)="aplicar_filtros()">Aceptar</ion-button>
+        <ion-button color="primary" style="--ion-color-primary: #cb4040;padding-left: 10px;padding-right: 10px;height: 40px;" (click)="cerrar_filtros()" >Cancelar</ion-button>
+
+    </ng-template>
+</ion-modal>

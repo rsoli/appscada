@@ -1,0 +1,6 @@
+{
+	"appId": "com.ende.scada",
+	"appName": "Scada",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

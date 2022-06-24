@@ -17,8 +17,8 @@
       <ion-img class="img_menu"  src="./assets/icon/logo_blanco.png"></ion-img>
     </div>
     <!-- <div style="color: white;text-align: center;padding-top: 30px;font-size: 15px;font-family: Verdana;">Bienvenido</div> -->
-    <div style="text-align: center;color:white;font-size: 15px;margin-top: 15PX;font-family: Verdana;">Empresa Nacional de Eléctricidad</div>
-    <div style="text-align: center;color:white;font-size: 15px;margin-top: 0PX;font-family: Verdana;">SCADA</div>
+    <div style="text-align: center;color:white;font-size: 15px;margin-top: 15PX;font-family: Verdana;">SISTEMA DE INCIDENCIAS</div>
+    <div style="text-align: center;color:white;font-size: 15px;margin-top: 0PX;font-family: Verdana;">GOM - DOR</div>
   </div>
 
  
@@ -35,6 +35,8 @@
         -->
   
       <ion-grid>
+
+
         <ion-row>
           <ion-col size="6">
             <div class="btnprincipal" >
@@ -48,18 +50,20 @@
               </div>
             </div>
           </ion-col>
+
           <ion-col size="6">
             <div class="btnprincipal" >
-              <div  class="btnprincipal2" routerLink="/deuda">
+              <div  class="btnprincipal2" routerLink="/mantenimiento">
                 <div>
-                  <ion-img class="img_menu"  src="./assets/icon/dinero.png"></ion-img>
+                  <ion-img class="img_menu"  src="./assets/icon/mantenimiento.png"></ion-img>
                 </div>
                 <div class="text_menu">
-                  Deudas
+                  Mantenimiento
                 </div>
               </div>
             </div>
           </ion-col>
+
         </ion-row>
       
         <ion-row>
@@ -92,12 +96,12 @@
         <ion-row>
           <ion-col size="6">
             <div class="btnprincipal" >
-              <div  class="btnprincipal2" routerLink="/mantenimiento">
+              <div  class="btnprincipal2" routerLink="/deuda">
                 <div>
-                  <ion-img class="img_menu"  src="./assets/icon/mantenimiento.png"></ion-img>
+                  <ion-img class="img_menu"  src="./assets/icon/dinero.png"></ion-img>
                 </div>
                 <div class="text_menu">
-                  Mantenimiento
+                  Redu Rem
                 </div>
               </div>
             </div>
@@ -122,6 +126,22 @@
 
   </div>
 
-
+<br><br><br><br><br>
+<br><br><br><br><br>
+<br><br><br><br><br>
+<br><br><br><br><br>
+<ion-list>
+  <ion-list-header>
+    <ion-label>New This Week</ion-label>
+    <ion-button>See All</ion-button>
+  </ion-list-header>
+  <ion-item *ngFor="let push of pushService.mensajes ">
+    <h3>{{push.title}}</h3>
+    <p>{{push.body}}</p>
+    <p>
+      {{push.additionalData | json}}
+    </p>
+  </ion-item>
+</ion-list>
 
 </ion-content>

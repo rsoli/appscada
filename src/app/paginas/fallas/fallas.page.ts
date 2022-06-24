@@ -31,8 +31,9 @@ export class FallasPage implements OnInit {
 
   fecha_hora_evento:string='';
 
-
   
+
+  isModalOpen:any=false;
   constructor(
     private falla_servicio:FallasService,
     private loadingController:LoadingController
@@ -46,12 +47,27 @@ export class FallasPage implements OnInit {
     //console.log("juan pxp ",respuesta);
 
   }
+  abrir_filtros(){
+    this.fecha_hora_evento=new Date().toISOString();
+    this.isModalOpen=true;
+  }
+  aplicar_filtros(){
+
+    this.formatDate(this.fecha_hora_evento);
+    this.isModalOpen=false;
+  }
+
+  cerrar_filtros(){
+    this.isModalOpen=false;
+  }
   formatDate(fecha:any){
     const date = moment(fecha);
 
     this.fecha_hora_evento=date.format('D/M/YYYY');
     this.bandera_inicio=0;
     this.contador_pagina=1;
+    console.log( this.fecha_hora_evento);
+    
     this.GetFallas();
 
   }
@@ -113,6 +129,7 @@ export class FallasPage implements OnInit {
       
       this.bandera_inicio++;
       this.lista_fallas=JSON.parse(JSON.stringify(data)).datos;
+console.log(data);
 
       if(this.bandera_inicio==1){
         if(Number(this.cantidad_pagina=Math.round(JSON.parse(JSON.stringify(data)).total)) <10){

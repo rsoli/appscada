@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: "http://appscada.endetransmision.bo/pxp/lib/rest/scada/"
+  apiUrl: "https://appscada.endetransmision.bo/pxp/lib/rest/scada/"
 };
 
 /*

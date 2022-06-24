@@ -1,5 +1,5 @@
 <ion-header style="border-bottom: 0px solid #fff;">
-    <ion-toolbar style="height: 60px;">
+    <ion-toolbar>
   
   
       <ion-buttons slot="start">
@@ -7,42 +7,14 @@
       </ion-buttons>
   
   
-      <div style="text-align: center;margin-top: 5px;">
+      <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;">
         <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
       </div>
   
-      <ion-buttons slot="end">
-
-        <div style="margin-top: 0px;text-align: right;">
-
-
-            <!-- <ion-input [value]="dateValue2"></ion-input> -->
-
-            <ion-button fill="clear" id="open-date-input-2" style="margin-top: 0px;zoom:1.1;">
-                <ion-icon name="calendar-clear-sharp"></ion-icon>
-            </ion-button>
-            <ion-popover trigger="open-date-input-2" show-backdrop="false">
-                <ng-template>
-                    <ion-datetime  displayFormat="D-MMMM-YYYY"
-                    #popoverDatetime2
-                    presentation="date"
-                    (ionChange)="dateValue2 = formatDate(popoverDatetime2.value)"
-                    ></ion-datetime>
-                </ng-template>
-            </ion-popover>
-
-            
-
-
-            
-
-        </div>
-
-        <!-- <div>
-          <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
-        </div> -->
-          <!-- <ion-icon name="notifications-outline" style="zoom:2.0;"></ion-icon> -->
-      </ion-buttons>
+      <ion-button slot="end" (click)="abrir_filtros()" fill="clear" id="open-date-input-2" >
+        <!-- <ion-icon name="calendar-clear-sharp"></ion-icon> -->
+        <ion-icon name="funnel" style="color:white;"></ion-icon>
+    </ion-button> 
   
       <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
   
@@ -51,29 +23,15 @@
   
   
   
-</ion-header>
+  </ion-header>
   
-<div style="background: #fff;">
-
-<ion-row>
-    <ion-col size="3">
-
-    </ion-col>
-    <ion-col size="6">
-        <div style="text-align: center;color:black;font-size: 12px;margin-top: 0px;padding: 8px;font-family: Verdana;"> 
-            Lista de mantenimientos
-        </div>
-    </ion-col>
-    <ion-col size="3">
-
-
-
-        
-    </ion-col>
-</ion-row>
-
-</div>
-
+  <div style="background: #fff;">
+    
+    <div style="text-align: center;color:rgb(75, 70, 70);font-size: 12px;margin-top: 7px;padding: 8px;font-family: Segoe;font-weight: bold;"> 
+      LISTA DE MANTENIMIENTO
+    </div>
+  
+  </div>
 
 
 <ion-content>
@@ -114,10 +72,16 @@
                                                 <div style="width: 40px;" *ngIf="item.estado == 'REALIZADO' " >
                                                     <ion-img class="img_menu"  src="./assets/icon/realizado.png"></ion-img>
                                                 </div>
+                                                <div style="width: 40px;" *ngIf="item.estado == 'PROGRAMADO' " >
+                                                    <ion-img class="img_menu"  src="./assets/icon/programado.png"></ion-img>
+                                                </div>
+                                                <div style="width: 40px;" *ngIf="item.estado == 'INICIADO' " >
+                                                    <ion-img class="img_menu"  src="./assets/icon/iniciado.png"></ion-img>
+                                                </div>
                                             </ion-col>
                                             <ion-col size="10" style="font-size:12px;">
                                                 <div style="font-weight: bold;font-size: 11px;color: #616161;">
-                                                    Equipo
+                                                    {{item.trabajo}}
                                                 </div> 
                                                 <div style="font-size: 11px;padding-top: 4px;" class="tarjeta-descripcion">
                                                     {{item.equipo}}
@@ -127,21 +91,6 @@
                                     <ion-row class="linea_separador">
                                         <ion-col size="6">
                                            
-                                            <div  class="tarjeta-titulo">
-                                                Trabajo
-                                            </div>
-                                            <div class="tarjeta-descripcion" >
-                                                {{item.trabajo}}
-                                            </div>
-                                            <div  class="tarjeta-titulo">
-                                                Instalación
-                                            </div>
-                                            <div class="tarjeta-descripcion" >
-                                                {{item.instalacion}}
-                                            </div>
-                                        </ion-col>
-    
-                                        <ion-col size="6">
                                             <div class="tarjeta-titulo">
                                                 Regional
                                             </div>
@@ -153,6 +102,17 @@
                                             </div>
                                             <div class="tarjeta-descripcion">
                                                 {{item.sector}}
+                                            </div>
+
+                                        </ion-col>
+    
+                                        <ion-col size="6">
+                                         
+                                            <div  class="tarjeta-titulo">
+                                                Instalación
+                                            </div>
+                                            <div class="tarjeta-descripcion" >
+                                                {{item.instalacion}}
                                             </div>
                                         
                                         </ion-col>
@@ -207,3 +167,79 @@
 
 </ion-content>
 
+
+
+<ion-modal [isOpen]="isModalOpen" [canDismiss]="canDismiss" >
+    <ng-template >
+
+
+        <ion-header style="border-bottom: 0px solid #fff;">
+            <ion-toolbar>
+          
+            <ion-row>
+                <ion-col size="3">
+                    <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+                </ion-col>
+                <ion-col size="6">
+                    <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;padding-top: 10px;color:white;font-family: Segoe;font-weight: bold;">
+                        FILTROS          
+                  </div>
+                </ion-col>
+                <ion-col size="3">
+                    
+                </ion-col>
+            </ion-row>
+         
+          
+
+          
+          
+              <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
+          
+            </ion-toolbar>
+          
+          </ion-header>
+
+        <!-- <div style="background: linear-gradient(#0c287e, #2548b1);text-align: center;color:white;font-size: 12px;padding: 8px;padding-top: 25px;padding-bottom: 10px;font-family: Segoe;font-weight: bold;"> 
+            <ion-row>
+                <ion-col size="3">
+                    <div style="text-align: left;">
+                        <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+                    </div>
+
+                </ion-col>
+                <ion-col size="6">
+                    <div style="padding-top: 20px;">
+                        FILTROS
+                    </div>
+                    
+                </ion-col>
+                <ion-col size="3"></ion-col>
+            </ion-row>
+            
+        </div> -->
+        <ion-content>
+ 
+
+            <ion-row>
+                <ion-col size="12"> 
+                    <div style="margin-left: 9px;text-align: left;color:rgb(75, 70, 70);font-size: 16px;margin-top: 7px;padding: 8px;font-family: Segoe;font-weight: bold;">
+                        Fecha inicio del mantenimiento
+                    </div>
+                    
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12"> 
+                    <div style="text-align: center;">
+                        <ion-datetime presentation="date" displayFormat="DD/MM/YYYY" [(ngModel)]="fecha_inicio_mantenimiento"></ion-datetime> 
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-content>
+
+        <ion-button color="primary" style="--ion-color-primary: #1639A3;padding-left: 10px;padding-right: 10px;height: 40px;" (click)="aplicar_filtros()">Aceptar</ion-button>
+        <ion-button color="primary" style="--ion-color-primary: #cb4040;padding-left: 10px;padding-right: 10px;height: 40px;" (click)="cerrar_filtros()" >Cancelar</ion-button>
+
+    </ng-template>
+</ion-modal>

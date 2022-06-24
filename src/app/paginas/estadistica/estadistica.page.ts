@@ -32,7 +32,7 @@ export class EstadisticaPage implements OnInit {
         'Yellow'
       ],
       datasets: [{
-        label: 'My First Dataset',
+        label: 'Grafico de líneas',
         data: [300, 50, 100],
         backgroundColor: [
           'rgb(255, 99, 132)',
@@ -59,7 +59,7 @@ export class EstadisticaPage implements OnInit {
         'Yellow'
       ],
       datasets: [{
-        label: 'My First Dataset',
+        label: 'Gráfico Pie',
         data: [300, 50, 100],
         backgroundColor: [
           'rgb(255, 99, 132)',
@@ -96,7 +96,7 @@ export class EstadisticaPage implements OnInit {
     const data = {
       labels: labels,
       datasets: [{
-        label: 'My First dataset',
+        label: 'Gráfico de líneas',
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgb(255, 99, 132)',
         data: [0, 10, 5, 2, 20, 30, 45],
@@ -122,7 +122,7 @@ export class EstadisticaPage implements OnInit {
       data: {
           labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
           datasets: [{
-              label: '# of Votes',
+              label: 'Cantidad de fallas',
               data: [12, 19, 3, 5, 2, 3],
               backgroundColor: [
                   'rgba(255, 99, 132, 0.2)',

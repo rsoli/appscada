@@ -33,8 +33,14 @@ ion-toolbar {
     padding-top: 4px;
 }
 .tarjeta-descripcion{
-    color: #616161;font-size: 10px;
+    color: #616161;font-size: 11px;
 }
 .icono-paginador{
     zoom:1.5;
+}
+
+ion-datetime{
+    background: #ffffff;
+    color: var(--ion-color-step-500, gray);
+    --background: #ffffff;; //color de fondo al escoger una gestion
 }
