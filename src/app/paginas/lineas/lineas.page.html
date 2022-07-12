@@ -1,0 +1,325 @@
+<ion-header style="border-bottom: 0px solid #fff;">
+  <ion-toolbar>
+
+
+    <ion-buttons slot="start">
+      <ion-back-button slot="icon-only" icon="arrow-back-outline" style="color: white ;" defaultHref="/" text=""  mode="ios"> </ion-back-button> 
+    </ion-buttons>
+
+
+    <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;">
+      <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+    </div>
+
+
+ 
+
+
+
+    <div slot="end"  fill="clear" id="open-date-input-2" >
+      <ion-button (click)="ocultar_detalle()" fill="clear" id="open-date-input-2" >
+        <ion-icon *ngIf="!hide_detalle"  slot="icon-only" name="eye-off" style="color: white;"></ion-icon>
+        <ion-icon *ngIf="hide_detalle"  slot="icon-only"  name="eye" style="color: white;" ></ion-icon>
+      </ion-button> 
+      <ion-button (click)="abrir_filtros()" fill="clear" id="open-date-input-2" >
+        <ion-icon slot="icon-only" name="funnel" style="color:white;"></ion-icon>
+      </ion-button> 
+    </div>
+
+
+    <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
+
+  </ion-toolbar>
+
+
+
+
+</ion-header>
+
+
+<ion-content>
+
+
+  <div id="map"></div>
+  <div class="detalle_linea" *ngIf="hide_detalle">
+    <div class="contenido_detalle">
+      <ion-row>
+        <ion-col size="2">
+          <div style="background:#FA58D0 ; width: 20px;height: 15px;">
+          </div>
+        </ion-col>
+        <ion-col size="4"> <div (click)="abrir_filtros_detalle_linea(500)">500 kV</div> </ion-col>
+
+        <ion-col size="2">
+          <div style="background:#40FF00 ; width: 20px;height: 15px;">
+          </div>
+        </ion-col>
+        <ion-col size="4"> <div (click)="abrir_filtros_detalle_linea(230)" >230 kV</div> </ion-col>
+
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="2">
+          <div style="background:#00FFFF ; width: 20px;height: 15px;">
+          </div>
+        </ion-col>
+        <ion-col size="4"><div (click)="abrir_filtros_detalle_linea(132)">132 kV</div> </ion-col>
+
+        <ion-col size="2">
+          <div style="background:#2E2EFE ; width: 20px;height: 15px;">
+          </div>
+        </ion-col>
+        <ion-col size="4"><div (click)="abrir_filtros_detalle_linea(115)">115 kV</div> </ion-col>
+
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="2">
+          <div style="background:#FE2E2E ; width: 20px;height: 15px;">
+          </div>
+        </ion-col>
+        <ion-col size="4"><div (click)="abrir_filtros_detalle_linea(69)">69 kV</div></ion-col>
+
+
+        <ion-col size="6">
+          <div (click)="abrir_filtros_detalle_linea(0)">
+          Total general
+          </div>
+        </ion-col>
+
+
+      </ion-row>
+    </div>
+  </div>
+
+</ion-content>
+
+
+
+
+<ion-modal [isOpen]="isModalOpen" [canDismiss]="canDismiss" >
+  <ng-template >
+
+
+      <ion-header style="border-bottom: 0px solid #fff;">
+          <ion-toolbar>
+        
+          <ion-row>
+              <ion-col size="3">
+                  <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+              </ion-col>
+              <ion-col size="6">
+                  <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;padding-top: 10px;color:white;font-family: Segoe;font-weight: bold;">
+                      FILTROS          
+                </div>
+              </ion-col>
+              <ion-col size="3">
+                  
+              </ion-col>
+          </ion-row>
+       
+    
+          </ion-toolbar>
+        
+        </ion-header>
+
+      <ion-content>
+
+          <br>
+          <br>
+          <ion-row>
+            <ion-col size="12"> 
+                <div class="tarjeta-titulo" style="margin-left: 9px;font-size: 15px;">
+                    Líneas de transmisión
+                </div>
+                
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="12"> 
+
+                <div style="text-align: center;">
+
+                    <ion-item (click)="abrir_selector_lineas_transmision(selector_linea_transmision)">
+                      <ion-select placeholder="Selecccionar línea" #selector_linea_transmision style="pointer-events: none" [interfaceOptions]="agregar_check_todo_lineas_transmision" [(ngModel)]="select_lineas_transmision" multiple="true" [value]="basket2">
+                      <ion-select-option *ngFor="let linea of opcion_lineas_transmision" [value]="option">{{linea.name}}</ion-select-option>
+                      </ion-select>
+                    </ion-item> 
+
+
+                </div>
+
+            </ion-col>
+        </ion-row>
+
+
+
+
+          <ion-row>
+              <ion-col size="12"> 
+                  <div class="tarjeta-titulo" style="margin-left: 9px;font-size: 15px;">
+                      Tensión de líneas
+                  </div>
+                  
+              </ion-col>
+          </ion-row>
+          <ion-row>
+              <ion-col size="12"> 
+
+                  <div style="text-align: center;">
+
+                      <!-- <ion-item>
+                        <ion-select placeholder="Selecccionar linea" [multiple]="true" [(ngModel)]="select_linea">
+                          <ion-select-option class="tarjeta-descripcion" *ngFor="let linea of opcion_linea" value="{{linea.name}}">{{linea.name}}</ion-select-option>
+                        </ion-select>
+                      </ion-item> -->
+
+                      <ion-item (click)="abrir_selector_lineas(selector_linea)">
+                        <!-- <ion-label>Seleccionar</ion-label>  -->
+                        <ion-select placeholder="Selecccionar línea" #selector_linea style="pointer-events: none" [interfaceOptions]="agregar_check_todo_lineas" [(ngModel)]="select_linea" multiple="true" [value]="basket2">
+                        <ion-select-option *ngFor="let linea of opcion_linea" [value]="option">{{linea.name}}</ion-select-option>
+                        </ion-select>
+                      </ion-item> 
+
+
+                  </div>
+
+              </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col size="12"> 
+                <div class="tarjeta-titulo" style="margin-left: 9px;font-size: 15px;">
+                    Subestación
+                </div>
+                
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="12"> 
+
+                <div style="text-align: center;">
+
+                    <ion-item (click)="abrir_selector_subestacion(selector)">
+                       <!-- <ion-label>Seleccionar</ion-label>  -->
+                      <ion-select placeholder="Selecccionar subestación" #selector style="pointer-events: none" [interfaceOptions]="agregar_check_todo_subestacion" [(ngModel)]="select_subestacion" multiple="true" [value]="basket">
+                      <ion-select-option *ngFor="let subestacion of opcion_subestacion" [value]="option">{{subestacion.name}}</ion-select-option>
+                      </ion-select>
+                    </ion-item> 
+
+
+                </div>
+
+            </ion-col>
+
+
+
+ 
+
+
+        </ion-row>
+
+      </ion-content>
+
+      <ion-button color="primary" style="--ion-color-primary: #1639A3;padding-left: 10px;padding-right: 10px;height: 40px;" (click)="aplicar_filtros()">Aceptar</ion-button>
+      <ion-button color="primary" style="--ion-color-primary: #cb4040;padding-left: 10px;padding-right: 10px;height: 40px;" (click)="cerrar_filtros()" >Cancelar</ion-button>
+
+  </ng-template>
+</ion-modal>
+
+
+<ion-modal [isOpen]="isModalDetalleLinea" [canDismiss]="canDismiss" >
+  <ng-template >
+
+
+      <ion-header style="border-bottom: 0px solid #fff;">
+          <ion-toolbar>
+        
+          <ion-row>
+              <ion-col size="3">
+                  <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+              </ion-col>
+              <ion-col size="7">
+                  <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;padding-top: 10px;color:white;font-family: Segoe;font-weight: bold;">
+                      Detalle {{dato_linea}}        
+                </div>
+              </ion-col>
+              <ion-col size="2">
+                  
+              </ion-col>
+          </ion-row>
+       
+          </ion-toolbar>
+        
+      </ion-header>
+
+      <ion-content>
+        <ion-grid >
+
+            <ion-row style="border: 0.5px solid #d0d0d0;font-weight: bold;">
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        Componente
+                    </div>
+                  </ion-col>
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        Tension
+                    </div>
+                  </ion-col>
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        Long. KM
+                    </div>
+                  </ion-col>
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        Cap. MW
+                    </div>
+                  </ion-col>
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        Cap. MVA
+                    </div>
+                  </ion-col>
+            </ion-row>
+        
+        
+            <ion-row *ngFor="let item of lista_detalle_linea_seleccionado" style="font-size: 11;border: 0.5px solid #d0d0d0;" [ngClass]="{'negrita' : item.componente==='Total' || item.componente==='Total general' }">
+                
+              <ion-col  style="font-size: 0.6em;" >
+                <div>
+                    {{item.componente}} 
+                </div>
+              </ion-col>
+              <ion-col  style="font-size: 0.6em;" >
+                <div>
+                    {{item.tension}} 
+                </div>
+              </ion-col>
+              <ion-col  style="font-size: 0.6em;" >
+                <div>
+                    {{item.longitud }} 
+                </div>
+              </ion-col>
+              <ion-col  style="font-size: 0.6em;" >
+                <div>
+                    {{item.capacidad_mw}} 
+                </div>
+              </ion-col>
+              <ion-col  style="font-size: 0.6em;" >
+                <div>
+                    {{item.capacidad_mva}} 
+                </div>
+              </ion-col>
+           
+            </ion-row>
+        </ion-grid>
+
+
+      </ion-content>
+
+      <ion-button color="primary" style="--ion-color-primary: #cb4040;padding-left: 10px;padding-right: 10px;height: 40px;" (click)="cerrar_filtros_detalle_linea()" >Cancelar</ion-button>
+
+  </ng-template>
+</ion-modal>

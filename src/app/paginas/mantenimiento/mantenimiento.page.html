@@ -3,7 +3,7 @@
   
   
       <ion-buttons slot="start">
-        <ion-back-button icon="arrow-back-outline" style="color: white ;" defaultHref="/" text=""  mode="ios"> </ion-back-button> 
+        <ion-back-button slot="icon-only" icon="arrow-back-outline" style="color: white ;" defaultHref="/" text=""  mode="ios"> </ion-back-button> 
       </ion-buttons>
   
   
@@ -13,7 +13,7 @@
   
       <ion-button slot="end" (click)="abrir_filtros()" fill="clear" id="open-date-input-2" >
         <!-- <ion-icon name="calendar-clear-sharp"></ion-icon> -->
-        <ion-icon name="funnel" style="color:white;"></ion-icon>
+        <ion-icon slot="icon-only" name="funnel" style="color:white;"></ion-icon>
     </ion-button> 
   
       <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
@@ -73,7 +73,7 @@
                                                     <ion-img class="img_menu"  src="./assets/icon/realizado.png"></ion-img>
                                                 </div>
                                                 <div style="width: 40px;" *ngIf="item.estado == 'PROGRAMADO' " >
-                                                    <ion-img class="img_menu"  src="./assets/icon/programado.png"></ion-img>
+                                                    <ion-img class="img_menu"  src="./assets/icon/programado3.png"></ion-img>
                                                 </div>
                                                 <div style="width: 40px;" *ngIf="item.estado == 'INICIADO' " >
                                                     <ion-img class="img_menu"  src="./assets/icon/iniciado.png"></ion-img>
@@ -232,7 +232,14 @@
             <ion-row>
                 <ion-col size="12"> 
                     <div style="text-align: center;">
-                        <ion-datetime presentation="date" displayFormat="DD/MM/YYYY" [(ngModel)]="fecha_inicio_mantenimiento"></ion-datetime> 
+                        <ion-datetime 
+                        presentation="date" 
+                        displayFormat="DD/MM/YYYY" 
+                        [(ngModel)]="fecha_inicio_mantenimiento"
+                        [isDateEnabled]="activar_fechas" 
+                        >
+
+                        </ion-datetime> 
                     </div>
                 </ion-col>
             </ion-row>

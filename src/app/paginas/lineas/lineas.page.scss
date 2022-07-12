@@ -1,3 +1,16 @@
+ion-content {
+    #map {
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 150ms ease-in;
+      display: block;
+      &.show-map{
+        opacity: 1;
+      }
+    }
+}
+
 ion-toolbar {
     --color: #ffffff;
     --background: linear-gradient(#0c287e, #2548b1);
@@ -39,8 +52,7 @@ ion-datetime{
     font-size: 11px;
     color: #616161;
     font-weight: bold;
-    padding-top: 15px;
-    text-align: center;
+    padding-top: 4px;
 }
 .tarjeta-descripcion{
     color: #616161;font-size: 11px;
@@ -48,21 +60,26 @@ ion-datetime{
 .icono-paginador{
     zoom:1.5;
 }
-
-.tarjeta_estadistico{
-    margin-top: 4px; 
-        margin-bottom: 4px; 
-        margin-left: 15px; 
-        margin-right: 15px; 
-        background:#fff;
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+.detalle_linea{
+    position: relative;
+    top: -125px;
+    width: 250px;
+    // margin: 0 auto;
+    opacity: 0.6;
+    background: black;
+    margin-left: 15px;
+    border-radius: 5px;
+    color: white;
+}
+.contenido_detalle{
+    padding: 8px;
 }
 
-
-// .torta_falla li span {
-//     display: inline-block;
-//     width: 12px;
-//     height: 12px;
-//     margin-right: 10px;
-//     border-radius: 25px;
-// }
+.negrita{
+    font-size: 1.0em;
+    color: #262626;
+    
+    font-weight: bold;
+    padding-top: 4px;
+    background: rgb(235, 233, 233);
+}

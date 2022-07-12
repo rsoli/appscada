@@ -5,6 +5,8 @@ import { IonContent } from '@ionic/angular';
 
 import { LoadingController } from '@ionic/angular';
 import * as moment from 'moment';
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-turno',
@@ -19,6 +21,7 @@ export class TurnoPage implements OnInit {
   bandera_inicio:number=0;
   start:number=0;
   limite:number=10;
+  fecha_turno:any;
 
   lista_turnos :Array<TurnoModelo>=[];
 
@@ -27,30 +30,69 @@ export class TurnoPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
 
   fecha_inicio_turno:string='';
-
+  isModalOpen:any=false;
+  
   constructor(
     private mantenimiento_servicio:MantenimientosService,
-    private loadingController:LoadingController
+    private loadingController:LoadingController,
+    private callNumber: CallNumber,
+    public toastController: ToastController
   ) { }
 
   ngOnInit() {
-    this.GetTurno();
+    this.preparar_turnos();
   }
-  GetTurno(){
+  async alerta(mensaje:string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000
+    });
+    toast.present();
+  }
+  abrir_filtros(){
+    this.isModalOpen=true;
+  }
+  aplicar_filtros(){
+
+    this.formatDate(this.fecha_turno);
+    this.isModalOpen=false;
+  }
+
+  cerrar_filtros(){
+    this.isModalOpen=false;
+  }
+  formatDate(fecha:any){
+
+    const date = moment(fecha);
+    this.fecha_inicio_turno=String(date.format('D/M/YYYY') );
+    this.preparar_turnos();
+
+  }
+  llamarContacto(contacto:string){
+    if( String(contacto) !='' || String(contacto) != 'No asignado' ){
+      this.callNumber.callNumber(contacto, true)
+      .then(res => console.log('Launched dialer!', res))
+      .catch(err => console.log('Error launching dialer', err));
+    }else{
+      this.alerta('Personal sin contacto');
+    }
+
+  }
+  async preparar_turnos(){
     
-    this.mostrar_loading();
-    this.get_fallas_servicio();
+    await this.mostrar_loading();
+    this.get_servicio_turnos();
     
   }
-  get_fallas_servicio(){
+  get_servicio_turnos(){
 
     this.mantenimiento_servicio.get_turnos(this.start,this.limite,this.fecha_inicio_turno).subscribe(data=>{
-      console.log("lista mante ",data);
-      
+
       this.bandera_inicio++;
       this.lista_turnos=JSON.parse(JSON.stringify(data)).datos;
-console.log(this.lista_turnos);
-
+      
+      this.fecha_inicio_turno = (moment(String(this.lista_turnos[0].fecha))).format('D/M/YYYY');
+     
       if(this.bandera_inicio==1){
         if(Number(this.cantidad_pagina=Math.round(JSON.parse(JSON.stringify(data)).total)) <10){
           this.cantidad_pagina=1;

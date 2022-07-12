@@ -5,7 +5,7 @@
   
   
       <ion-buttons slot="start">
-        <ion-back-button icon="arrow-back-outline" style="color: white ;" defaultHref="/" text=""  mode="ios"> </ion-back-button> 
+        <ion-back-button slot="icon-only" icon="arrow-back-outline" style="color: white ;" defaultHref="/" text=""  mode="ios"> </ion-back-button> 
       </ion-buttons>
   
   
@@ -13,10 +13,43 @@
         <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
       </div>
   
-      <ion-button slot="end" (click)="abrir_filtros()" fill="clear" id="open-date-input-2" >
-        <!-- <ion-icon name="calendar-clear-sharp"></ion-icon> -->
-        <ion-icon name="funnel" style="color:white;"></ion-icon>
+      
+    <ion-button slot="end" (click)="abrir_filtros()"   fill="clear" id="open-date-input-2" >
+        
+        <ion-icon slot="icon-only" name="funnel" style="color:white;">
+            <!-- <ion-popover trigger="open-date-input" show-backdrop="false">
+                <ng-template>
+                  <ion-datetime
+                    #popoverDatetime
+                    presentation="date"
+                    (ionChange)="dateValue = formatDate(popoverDatetime.value)"
+                  ></ion-datetime>
+                </ng-template>
+            </ion-popover> -->
+        </ion-icon>
+
     </ion-button> 
+
+    <!-- <ion-button slot="end" button="true"  fill="clear" id="open-date-input" >
+        <ion-icon slot="icon-only" name="funnel" style="color:white;">
+            <ion-popover trigger="open-date-input" show-backdrop="false">
+            <ng-template>
+                <ion-datetime
+                #popoverDatetime
+                presentation="date"
+                displayFormat="DD/MM/YYYY" 
+                [(ngModel)]="fecha_hora_evento" 
+                [isDateEnabled]="activar_fechas" 
+                (ionChange)="aplicar_filtros();popoverDatetime.confirm(true);"
+                >
+            </ion-datetime>
+            
+            </ng-template>
+            </ion-popover>
+        </ion-icon>
+    </ion-button>  -->
+    
+
   
       <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
   
@@ -116,12 +149,12 @@
                               
                                             <ion-col size="7">
                                                 <ion-row>
-                                                    <ion-col size="4">
+                                                    <ion-col size="2">
                                                         <!-- <div class="tarjeta-titulo">
                                                             Informe
                                                         </div> -->
                                                     </ion-col>
-                                                    <ion-col size="8">
+                                                    <ion-col size="10">
                                                         <div style="color: white;font-weight: bold;font-size: 10px;background: #1639A3;padding: 5px;text-align: center;">
                                                             {{item.nroinforme}}
                                                         </div>
@@ -225,10 +258,34 @@
             </ion-row>
             <ion-row>
                 <ion-col size="12"> 
-                    <div style="text-align: center;">
-                        <ion-datetime presentation="date" displayFormat="DD/MM/YYYY" [(ngModel)]="fecha_hora_evento"></ion-datetime> 
+
+                     <div style="text-align: center;">
+                        <ion-datetime  presentation="date" 
+                        displayFormat="DD/MM/YYYY" 
+                        [(ngModel)]="fecha_hora_evento" 
+                        
+                        [isDateEnabled]="activar_fechas" 
+                      
+                       
+                        >
+                        
+                        
+                        </ion-datetime> 
                     </div>
+
+               
+
+               
+
+
+
                 </ion-col>
+
+
+
+
+                
+
             </ion-row>
         </ion-content>
 

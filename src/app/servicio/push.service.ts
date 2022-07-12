@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { OneSignal, OSNotification, OSNotificationPayload } from '@ionic-native/onesignal/ngx';
 //import{Storage} from '@ionic/storage';
  import { Storage } from '@ionic/storage-angular';
@@ -17,10 +18,12 @@ export class PushService {
     // }
   ];
 
+  userId:string;
   pushListener = new EventEmitter<OSNotificationPayload>();
   constructor(
     private oneSignal: OneSignal,
-    private storage: Storage
+    private storage: Storage,
+    private router: Router
     ) { 
 
     this.storage.create()
@@ -43,11 +46,23 @@ export class PushService {
      this.notificacionRecibida(noti);
     });
     
-    this.oneSignal.handleNotificationOpened().subscribe((noti) => {
+    this.oneSignal.handleNotificationOpened().subscribe( async (noti) => {
       // do something when a notification is opened
+      await this.notificacionRecibida(noti.notification);
       console.log("Notificacion abierta ",noti);
+
+      //this.borrarMensajes();//quitar esto para probar notificacion juan
+      this.router.navigate(['/eventos']);
+
     });
     
+    //obtener id del suscriptor
+    this.oneSignal.getIds().then(info=>{
+      this.userId = info.userId;
+      console.log("Id del usuario ",this.userId);
+      
+    });
+
     this.oneSignal.endInit();
   }
   async notificacionRecibida(noti:OSNotification){
@@ -59,13 +74,20 @@ export class PushService {
     }
     this.mensajes.unshift(payload);
     this.pushListener.emit(payload);
-    this.guardarMensajes();
+    await this.guardarMensajes();
   }
-  guardarMensajes(){
+  async guardarMensajes(){
     this.storage.set('mensajes',this.mensajes);
   }
   async cargarMensajes(){
     
      this.mensajes= await this.storage.get('mensajes') || [];
+
+     return this.mensajes;
+  }
+  async borrarMensajes(){
+    await this.storage.remove('mensajes');
+    this.mensajes=[];
+    this.guardarMensajes();
   }
 }

@@ -27,10 +27,24 @@ const routes: Routes = [
     loadChildren: () => import('./paginas/estadistica/estadistica.module').then( m => m.EstadisticaPageModule)
   },
   {
+    path: 'eventos',
+    loadChildren: () => import('./paginas/eventos/eventos.module').then( m => m.EventosPageModule)
+  },
+  {
+    path: 'eventos-detalle/:id/:origen_destino',
+    loadChildren: () => import('./paginas/eventos-detalle/eventos-detalle.module').then( m => m.EventosDetallePageModule)
+  },
+  {
+    path: 'lineas',
+    loadChildren: () => import('./paginas/lineas/lineas.module').then( m => m.LineasPageModule)
+  },
+  {
     path: '',
     redirectTo: 'inicio',
     pathMatch: 'full'
-  },
+  }
+
+
 ];
 
 

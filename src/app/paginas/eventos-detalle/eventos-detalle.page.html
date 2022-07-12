@@ -1,0 +1,118 @@
+
+
+<ion-header style="border-bottom: 0px solid #fff;">
+  <ion-toolbar>
+
+
+    <ion-buttons slot="start">
+      <ion-back-button icon="arrow-back-outline" style="color: white ;" defaultHref="/" text=""  mode="ios"> </ion-back-button> 
+    </ion-buttons>
+
+
+    <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;">
+      <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+    </div>
+
+
+    <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
+
+  </ion-toolbar>
+
+
+
+
+</ion-header>
+
+<ion-content>
+    <ion-grid >
+
+        <ion-row style="font-size: 11;border: 0.5px solid #d0d0d0;font-weight: bold;">
+                <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        S/E
+                    </div>
+                  </ion-col>
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                       kV.
+                    </div>
+                  </ion-col>
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        Det
+                    </div>
+                  </ion-col>
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        Bahia 
+                    </div>
+                  </ion-col>
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        Est
+                    </div>
+                  </ion-col>
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        Medida
+                    </div>
+                  </ion-col>
+                  <ion-col  style="font-size: 0.6em;" >
+                    <div>
+                        Hora
+                    </div>
+                  </ion-col>
+          
+        </ion-row>
+    
+    
+        <ion-row *ngFor="let item of lista_eventos_detalle" style="border: 0.5px solid #d0d0d0;"  [ngClass]="{'rojo' : item.estado_evento==='Abierto','amarillo' : item.estado_evento==='Falla' || item.estado_evento==='Operado'}"  >
+            
+          <ion-col  style="font-size: 0.4em;" >
+            <div>
+                {{item.subestacion_origen}} 
+            </div>
+          </ion-col>
+          <ion-col  style="font-size: 0.6em;" >
+            <div>
+                {{item.nivel_voltaje}} 
+            </div>
+          </ion-col>
+          <ion-col  style="font-size: 0.6em;" >
+            <div>
+                {{item.descripcion_evento | titlecase   }} 
+            </div>
+          </ion-col>
+          <ion-col  style="font-size: 0.6em;" >
+            <div>
+                {{item.bahia}} 
+            </div>
+          </ion-col>
+          <ion-col  style="font-size: 0.6em;" >
+            <div>
+                {{item.estado_evento}} 
+            </div>
+          </ion-col>
+          <ion-col  style="font-size: 0.6em;" >
+            <div>
+                {{item.es_medida}} 
+            </div>
+          </ion-col>
+          <ion-col  style="font-size: 0.6em;" >
+            <div>
+                {{item.hora}}:{{item.milisegundo}}
+            </div>
+          </ion-col>
+          
+    
+        </ion-row>
+    </ion-grid>
+      
+</ion-content>
+
+
+
+
+
+
+

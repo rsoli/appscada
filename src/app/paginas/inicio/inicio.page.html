@@ -1,8 +1,15 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-icon name="menu-outline" slot="start" style="zoom:2.5;"></ion-icon>
-    <ion-title class="ion-text-center">Bienvenido</ion-title>
-    <ion-icon name="notifications-outline" slot="end" style="zoom:2.2;"></ion-icon>
+    <ion-title class="ion-text-center" style="font-family: Verdana;font-size: 15px">Bienvenido</ion-title>
+    <!-- <ion-icon name="notifications-outline" slot="end" style="zoom:2.2;"></ion-icon> -->
+    <ion-icon name="person-outline" slot="end" style="zoom:1.7;"></ion-icon>
+    <!-- <div style="border-radius: 50%; background: #0b2e96;width: 35px;height: 35px;text-align: center;" slot="end">
+      <div style="padding: 6px;text-align: center;">
+        <ion-icon name="build-outline"  style="zoom:1;"></ion-icon>
+      </div>
+    </div> -->
+    
   </ion-toolbar>
 </ion-header> 
 
@@ -71,7 +78,7 @@
             <div class="btnprincipal" >
               <div  class="btnprincipal2" routerLink="/turno">
                 <div>
-                  <ion-img class="img_menu"  src="./assets/icon/trabajador.png"></ion-img>
+                  <ion-img class="img_menu"  src="./assets/icon/trabajador2.png"></ion-img>
                 </div>
                 <div class="text_menu">
                   Turnos
@@ -96,23 +103,31 @@
         <ion-row>
           <ion-col size="6">
             <div class="btnprincipal" >
-              <div  class="btnprincipal2" routerLink="/deuda">
+              <div  class="btnprincipal2" routerLink="/lineas">
+                <div>
+                  <ion-img class="img_menu" src="./assets/icon/map2.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Líneas
+                </div>
+              </div>
+              <!-- <div  class="btnprincipal2" routerLink="/lineas">
                 <div>
                   <ion-img class="img_menu"  src="./assets/icon/dinero.png"></ion-img>
                 </div>
                 <div class="text_menu">
                   Redu Rem
                 </div>
-              </div>
+              </div> -->
             </div>
           </ion-col>
           <ion-col size="6">
             <div class="btnprincipal" >
-              <div  class="btnprincipal2">
+              <div  class="btnprincipal2" routerLink="/eventos">
                 <div>
                   <ion-img class="img_menu"  src="./assets/icon/evento.png"></ion-img>
                 </div>
-                <div class="text_menu">
+                <div class="text_menu" >
                   Eventos
                 </div>
               </div>
@@ -126,15 +141,31 @@
 
   </div>
 
-<br><br><br><br><br>
+<!-- <br><br><br><br><br>
 <br><br><br><br><br>
 <br><br><br><br><br>
 <br><br><br><br><br>
 <ion-list>
+
   <ion-list-header>
-    <ion-label>New This Week</ion-label>
-    <ion-button>See All</ion-button>
+    <ion-label>UserID</ion-label>
   </ion-list-header>
+
+  <ion-item>
+    <ion-label>{{pushService.UserID}}</ion-label>
+  </ion-item>
+
+  <ion-list-header>
+    <ion-label>Pushes</ion-label>
+  </ion-list-header>
+
+  <ion-buttons slot="end">
+    <ion-button (click)="borrarMensajes()">
+      <ion-icon slot="icon-only" name="trash"
+      color="danger"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+
   <ion-item *ngFor="let push of pushService.mensajes ">
     <h3>{{push.title}}</h3>
     <p>{{push.body}}</p>
@@ -142,6 +173,7 @@
       {{push.additionalData | json}}
     </p>
   </ion-item>
-</ion-list>
+</ion-list>   -->
+
 
 </ion-content>

@@ -9,6 +9,8 @@ import { LoadingController } from '@ionic/angular';
 
 import * as moment from 'moment';
 
+
+
 @Component({
   selector: 'app-fallas',
   templateUrl: './fallas.page.html',
@@ -24,6 +26,8 @@ export class FallasPage implements OnInit {
   limite:number=10;
 
   lista_fallas :Array<FallaModelo>=[];
+  lista_fallas_calendario =[];
+  contador_calendario:number=0;
 
   loading: HTMLIonLoadingElement;
  
@@ -31,25 +35,57 @@ export class FallasPage implements OnInit {
 
   fecha_hora_evento:string='';
 
+  isModalOpen:any=false;
   
 
-  isModalOpen:any=false;
+  public disabledDatess: Date[] = [new Date(2022, 7, 10)];
+
   constructor(
     private falla_servicio:FallasService,
     private loadingController:LoadingController
-  ) { }
+  ) {
+    this.activar_fechas = this.activar_fechas.bind(this);
+  }
 
   ngOnInit() {
 
     this.GetFallas();
+    this.GetFechasCalendario();
 
     //var respuesta = PxpClient.Login('jjimenez','123','');
     //console.log("juan pxp ",respuesta);
 
   }
+  GetFechasCalendario(){
+
+      this.falla_servicio.get_fechas_calendario(0,1).subscribe(data=>{
+        
+        let aux=JSON.parse(JSON.stringify(data)) ;
+        this.lista_fallas_calendario =[ [JSON.parse(aux.datos[0].fechas_calendario)][0] ][0];
+        
+      },error=>{
+  
+        console.log("ver errores ",JSON.stringify(error));
+  
+      }) 
+  
+  }
+
+  activar_fechas(dateIsoString: string) {
+    // const date = new Date(dateIsoString);
+    const aux = this.lista_fallas_calendario.find(fecha => fecha == dateIsoString);
+    if(aux){
+      return true;
+    }else{
+      return false;
+    }
+  }
+ 
   abrir_filtros(){
+
     this.fecha_hora_evento=new Date().toISOString();
     this.isModalOpen=true;
+    
   }
   aplicar_filtros(){
 
@@ -69,7 +105,7 @@ export class FallasPage implements OnInit {
     console.log( this.fecha_hora_evento);
     
     this.GetFallas();
-
+    
   }
 
   pagina_siguiente(){
@@ -105,14 +141,14 @@ export class FallasPage implements OnInit {
     if(this.cantidad_pagina>1 && this.contador_pagina!=this.cantidad_pagina){
       this.content.scrollToTop();
       this.contador_pagina=this.cantidad_pagina;
-      this.start=this.limite*this.cantidad_pagina;
+      this.start=(this.limite*this.cantidad_pagina)-this.limite;
       this.GetFallas();
     }
 
   }
-  GetFallas(){
+  async GetFallas(){
     
-    this.mostrar_loading();
+    await this.mostrar_loading();
     this.get_fallas_servicio();
     
   }
@@ -129,16 +165,18 @@ export class FallasPage implements OnInit {
       
       this.bandera_inicio++;
       this.lista_fallas=JSON.parse(JSON.stringify(data)).datos;
-console.log(data);
+      console.log(data);
 
       if(this.bandera_inicio==1){
         if(Number(this.cantidad_pagina=Math.round(JSON.parse(JSON.stringify(data)).total)) <10){
           this.cantidad_pagina=1;
         }else{
-          this.cantidad_pagina=Math.round(JSON.parse(JSON.stringify(data)).total/this.limite);
+          this.cantidad_pagina=Math.ceil((JSON.parse(JSON.stringify(data)).total)/this.limite);
+         
         }
         
       }
+     
       this.ocultar_loading();
      
     },error=>{

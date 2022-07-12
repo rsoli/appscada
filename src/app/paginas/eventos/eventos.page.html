@@ -1,0 +1,231 @@
+
+
+<ion-header style="border-bottom: 0px solid #fff;">
+  <ion-toolbar>
+
+
+    <ion-buttons slot="start">
+      <ion-back-button slot="icon-only" icon="arrow-back-outline" style="color: white ;" defaultHref="/" text=""  mode="ios"> </ion-back-button> 
+    </ion-buttons>
+
+
+    <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;">
+      <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+    </div>
+
+    <ion-button slot="end" (click)="abrir_filtros()" fill="clear" id="open-date-input-2" >
+      <!-- <ion-icon name="calendar-clear-sharp"></ion-icon> -->
+      <ion-icon slot="icon-only" name="funnel" style="color:white;"></ion-icon>
+  </ion-button> 
+
+    <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
+
+  </ion-toolbar>
+
+
+
+
+</ion-header>
+
+<div style="background: #fff;">
+  
+  <div style="text-align: center;color:rgb(75, 70, 70);font-size: 12px;margin-top: 7px;padding: 8px;font-family: Segoe;font-weight: bold;"> 
+    LISTA DE EVENTOS
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<ion-content>
+
+      
+      <ion-list>
+          <div style="background: #fff;">
+              <ion-row *ngFor="let item of lista_eventos" >
+                  <ion-col size="12">
+                      <div class="btnprincipal" 
+                      style="
+                      margin-top: 4px; 
+                      margin-bottom: 4px; 
+                      margin-left: 8px; 
+                      margin-right: 8px; 
+
+                      background:#fff;
+                      box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+                      "
+                      >
+                          
+                          <ion-row>             
+                              <ion-col size="12">
+                                  <div style="padding: 10px;">
+
+                                      <ion-row class="linea_separador">
+                                          <ion-col size="2" style="font-size:12px;">
+          
+                                            <div style="width: 40px;" *ngIf="item.tipo == 'CON RECONEXIÓN' " >
+                                              <ion-img class="img_menu"  src="./assets/icon/conectado.png"></ion-img>
+                                            </div>
+                                            <div style="width: 40px;" *ngIf="item.tipo == 'SIN RECONEXIÓN' " >
+                                              <ion-img class="img_menu"  src="./assets/icon/desconectado.png"></ion-img>
+                                            </div>
+                                          </ion-col>
+                                          <ion-col size="10">
+                                             
+                                              <div  class="tarjeta-titulo">
+                                                  Detalle del evento
+                                              </div>
+                                              <div class="tarjeta-descripcion" >
+                                                  A distancia Km. {{item.distancia}} subestación {{item.subestacion_origen}} - {{item.subestacion_destino}} con nivel de voltaje {{item.nivel_voltaje}} {{item.tipo | lowercase }} fase ({{item.fase | lowercase }}) {{item.zona | lowercase }}
+
+                                              </div>
+                                          </ion-col>
+                                      </ion-row>
+                                      <ion-row>
+      
+                                          <ion-col size="5">
+                                              <div class="tarjeta-titulo">
+                                                  <!-- Fecha del evento  -->
+                                              </div>
+                                              <div style="color: #1639A3;font-weight: bold;font-size: 10px;padding-top: 4px;">
+                                                  {{item.fecha_hora}}
+                                              </div>
+                                          </ion-col>
+                            
+                                          <ion-col size="7">
+                                              <ion-row>
+                                                  <ion-col size="2">
+                                                      <!-- <div class="tarjeta-titulo">
+                                                          Informe
+                                                      </div> -->
+                                                  </ion-col>
+                                                  <ion-col size="10">
+                                                      <div style="color: white;font-weight: bold;font-size: 10px;background: #1639A3;padding: 5px;text-align: center;" (click)="ver_detalle(item.id_evento,item.subestacion_origen,item.subestacion_destino)">
+                                                          Ver detalle
+                                                      </div>
+                                                  </ion-col>
+
+                                              </ion-row>
+
+                                             
+                                          
+                                          </ion-col>
+                                      </ion-row>
+                                  </div>
+                              </ion-col>
+                          </ion-row>
+      
+                      </div>
+                  </ion-col>
+              </ion-row>
+          </div>
+
+          <div style="padding-top: 3px;padding-right: 20px;padding-bottom: 3px;background: linear-gradient(#2548b1 ,#0c287e );text-align: center; ">
+              <ion-row>
+                  <ion-col size="12" style="width: 0px;">
+                      <ion-row>
+                          <ion-col size="1" class="paginador" (click)="pagina_inicio()"><ion-icon name="play-back-outline"  class="icono-paginador"></ion-icon></ion-col>
+                          <ion-col size="1" class="paginador" (click)="pagina_anterior()"><ion-icon name="chevron-back-outline" class="icono-paginador"></ion-icon></ion-col>
+                          <ion-col size="8" class="paginador">Página {{contador_pagina}} de {{cantidad_pagina}}</ion-col>
+                          <ion-col size="1" class="paginador" (click)="pagina_siguiente()"><ion-icon name="chevron-forward-outline" class="icono-paginador"></ion-icon></ion-col>
+                          <ion-col size="1" class="paginador" (click)="pagina_final()"><ion-icon name="play-forward-outline" class="icono-paginador"></ion-icon></ion-col>
+                          
+                      </ion-row>
+                  </ion-col>
+              </ion-row>
+          </div>
+          
+      </ion-list>
+  
+</ion-content>
+
+
+
+<ion-modal [isOpen]="isModalOpen" [canDismiss]="canDismiss" >
+  <ng-template >
+
+
+      <ion-header style="border-bottom: 0px solid #fff;">
+          <ion-toolbar>
+        
+          <ion-row>
+              <ion-col size="3">
+                  <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+              </ion-col>
+              <ion-col size="6">
+                  <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;padding-top: 10px;color:white;font-family: Segoe;font-weight: bold;">
+                      FILTROS          
+                </div>
+              </ion-col>
+              <ion-col size="3">
+                  
+              </ion-col>
+          </ion-row>
+       
+        
+
+        
+        
+            <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
+        
+          </ion-toolbar>
+        
+        </ion-header>
+
+      <!-- <div style="background: linear-gradient(#0c287e, #2548b1);text-align: center;color:white;font-size: 12px;padding: 8px;padding-top: 25px;padding-bottom: 10px;font-family: Segoe;font-weight: bold;"> 
+          <ion-row>
+              <ion-col size="3">
+                  <div style="text-align: left;">
+                      <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+                  </div>
+
+              </ion-col>
+              <ion-col size="6">
+                  <div style="padding-top: 20px;">
+                      FILTROS
+                  </div>
+                  
+              </ion-col>
+              <ion-col size="3"></ion-col>
+          </ion-row>
+          
+      </div> -->
+      <ion-content>
+
+
+          <ion-row>
+              <ion-col size="12"> 
+                  <div style="margin-left: 9px;text-align: left;color:rgb(75, 70, 70);font-size: 16px;margin-top: 7px;padding: 8px;font-family: Segoe;font-weight: bold;">
+                      Fecha del evento
+                  </div>
+                  
+              </ion-col>
+          </ion-row>
+          <ion-row>
+              <ion-col size="12"> 
+                  <div style="text-align: center;">
+                      <ion-datetime 
+                      presentation="date" 
+                      displayFormat="DD/MM/YYYY" 
+                      [(ngModel)]="fecha_hora_evento"
+                      [isDateEnabled]="activar_fechas" 
+                      >
+
+                      </ion-datetime> 
+                  </div>
+              </ion-col>
+          </ion-row>
+      </ion-content>
+
+      <ion-button color="primary" style="--ion-color-primary: #1639A3;padding-left: 10px;padding-right: 10px;height: 40px;" (click)="aplicar_filtros()">Aceptar</ion-button>
+      <ion-button color="primary" style="--ion-color-primary: #cb4040;padding-left: 10px;padding-right: 10px;height: 40px;" (click)="cerrar_filtros()" >Cancelar</ion-button>
+
+  </ng-template>
+</ion-modal>

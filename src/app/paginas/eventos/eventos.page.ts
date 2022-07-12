@@ -1,18 +1,21 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MantenimientoModelo } from '../../modelo/mantenimiento-modelo';
-import { MantenimientosService } from '../../servicio/mantenimientos.service';
+import { EventoModelo } from '../../modelo/evento-modelo';
+import { EventosService } from '../../servicio/eventos.service';
 import { IonContent } from '@ionic/angular';
 
 import { LoadingController } from '@ionic/angular';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
+
 
 
 @Component({
-  selector: 'app-mantenimiento',
-  templateUrl: './mantenimiento.page.html',
-  styleUrls: ['./mantenimiento.page.scss'],
+  selector: 'app-eventos',
+  templateUrl: './eventos.page.html',
+  styleUrls: ['./eventos.page.scss'],
 })
-export class MantenimientoPage implements OnInit {
+export class EventosPage implements OnInit {
+
 
   cantidad_pagina:number=0;
   contador_pagina:number=1;
@@ -20,34 +23,36 @@ export class MantenimientoPage implements OnInit {
   start:number=0;
   limite:number=10;
 
-  lista_mantenimientos :Array<MantenimientoModelo>=[];
-  listar_mantenimiento_calendario =[];
+  lista_eventos :Array<EventoModelo>=[];
+  lista_fallas_calendario =[];
 
   loading: HTMLIonLoadingElement;
  
   @ViewChild(IonContent) content: IonContent;
 
-  fecha_inicio_mantenimiento:string='';
+  fecha_hora_evento:string='';
 
   isModalOpen:any=false;
+
   constructor(
-    private mantenimiento_servicio:MantenimientosService,
-    private loadingController:LoadingController
+    private evento_servicio:EventosService,
+    private loadingController:LoadingController,
+    private router: Router,
+
   ) { 
     this.activar_fechas = this.activar_fechas.bind(this);
   }
 
   ngOnInit() {
-    this.GetMantenimiento();
+    this.GetEventos();
     this.GetFechasCalendario();
   }
   GetFechasCalendario(){
 
-    this.mantenimiento_servicio.get_fechas_calendario(0,1).subscribe(data=>{
+    this.evento_servicio.get_fechas_calendario(0,1).subscribe(data=>{
       
       let aux=JSON.parse(JSON.stringify(data)) ;
-      this.listar_mantenimiento_calendario =[ [JSON.parse(aux.datos[0].fechas_calendario)][0] ][0];
-      
+      this.lista_fallas_calendario =[ [JSON.parse(aux.datos[0].fechas_calendario)][0] ][0];
     },error=>{
 
       console.log("ver errores ",JSON.stringify(error));
@@ -56,21 +61,28 @@ export class MantenimientoPage implements OnInit {
 
   }
   activar_fechas(dateIsoString: string) {
-    // const date = new Date(dateIsoString);
-    const aux = this.listar_mantenimiento_calendario.find(fecha => fecha == dateIsoString);
+    const date = new Date(dateIsoString);
+    console.log("fecha ac",dateIsoString);
+    
+    const aux = this.lista_fallas_calendario.find(fecha => fecha == dateIsoString);
     if(aux){
       return true;
     }else{
       return false;
     }
   }
+  ver_detalle(id:number,origen:string,destino:string){
+
+    this.router.navigate(['/eventos-detalle/'+id,origen+' - '+destino]);
+
+  }
   abrir_filtros(){
-    this.fecha_inicio_mantenimiento=new Date().toISOString();
+    this.fecha_hora_evento=new Date().toISOString();
     this.isModalOpen=true;
   }
   aplicar_filtros(){
 
-    this.formatDate(this.fecha_inicio_mantenimiento);
+    this.formatDate(this.fecha_hora_evento);
     this.isModalOpen=false;
   }
 
@@ -80,23 +92,21 @@ export class MantenimientoPage implements OnInit {
   formatDate(fecha:any){
     const date = moment(fecha);
 
-    this.fecha_inicio_mantenimiento=date.format('D/M/YYYY');
+    this.fecha_hora_evento=date.format('D/M/YYYY');
     this.bandera_inicio=0;
     this.contador_pagina=1;
-    console.log( this.fecha_inicio_mantenimiento);
+    console.log( this.fecha_hora_evento);
     
-    this.GetMantenimiento();
+    this.GetEventos();
 
   }
-
-  
   pagina_siguiente(){
     
     if(this.contador_pagina+1<=this.cantidad_pagina){
       this.content.scrollToTop();
       this.contador_pagina++;
       this.start=this.start+this.limite;
-      this.GetMantenimiento();
+      this.GetEventos();
     }
   }
   pagina_anterior(){
@@ -105,7 +115,7 @@ export class MantenimientoPage implements OnInit {
       this.content.scrollToTop();
       this.contador_pagina--;
       this.start=this.start-this.limite;
-      this.GetMantenimiento();
+      this.GetEventos();
     }
   }
   pagina_inicio(){
@@ -114,7 +124,7 @@ export class MantenimientoPage implements OnInit {
       this.content.scrollToTop();
       this.contador_pagina=1;
       this.start=0;
-      this.GetMantenimiento();
+      this.GetEventos();
     }
 
   }
@@ -124,32 +134,31 @@ export class MantenimientoPage implements OnInit {
       this.content.scrollToTop();
       this.contador_pagina=this.cantidad_pagina;
       this.start=(this.limite*this.cantidad_pagina)-this.limite;
-      console.log("ver starat ",this.start);
-      
-      this.GetMantenimiento();
+      this.GetEventos();
     }
 
   }
 
-  async GetMantenimiento(){
+  async GetEventos(){
     
     await this.mostrar_loading();
-    this.get_mantenimiento_servicio();
+    this.get_eventos_servicio(); 
     
   }
-  get_mantenimiento_servicio(){
+  get_eventos_servicio(){
 
-    this.mantenimiento_servicio.get_mantenimientos(this.start,this.limite,this.fecha_inicio_mantenimiento).subscribe(data=>{
-      console.log("lista ",data);
+    this.evento_servicio.get_eventos(this.start,this.limite,this.fecha_hora_evento).subscribe(data=>{
       
       this.bandera_inicio++;
-      this.lista_mantenimientos=JSON.parse(JSON.stringify(data)).datos;
+      this.lista_eventos=JSON.parse(JSON.stringify(data)).datos;
+      console.log(data);
 
       if(this.bandera_inicio==1){
         if(Number(this.cantidad_pagina=Math.round(JSON.parse(JSON.stringify(data)).total)) <10){
           this.cantidad_pagina=1;
         }else{
           this.cantidad_pagina=Math.ceil((JSON.parse(JSON.stringify(data)).total)/this.limite);
+          
         }
         
       }
@@ -177,5 +186,5 @@ export class MantenimientoPage implements OnInit {
       console.log("Error al ocultar loading ",error);
     }
   }
-}
 
+}

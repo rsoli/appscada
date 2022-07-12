@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,9 +25,9 @@ import { IonicStorageModule } from '@ionic/storage-angular';
      }),
      IonicStorageModule.forRoot({
       driverOrder: [Drivers.SecureStorage, Drivers.IndexedDB, Drivers.LocalStorage]
-    })
+    }),
   ],
-  providers: [OneSignal,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [CallNumber,OneSignal,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
   
 })

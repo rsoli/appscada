@@ -1,12 +1,171 @@
-<app-header titulo="Estadisticas"></app-header>
+<ion-header style="border-bottom: 0px solid #fff;">
+    <ion-toolbar>
   
+  
+      <ion-buttons slot="start">
+        <ion-back-button slot="icon-only" icon="arrow-back-outline" style="color: white ;" defaultHref="/" text=""  mode="ios"> </ion-back-button> 
+      </ion-buttons>
+  
+  
+      <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;">
+        <ion-img class="img_menu" style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+      </div>
+  
+      <ion-button slot="end" (click)="abrir_filtros()" fill="clear" id="open-date-input-2" >
+       
+        <!-- <ion-icon name="funnel" style="color:white;"></ion-icon> -->
+    </ion-button> 
+  
+      <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
+  
+    </ion-toolbar>
+  
+  
+  
+  
+  </ion-header>
+
+  <div style="background: #fff;">
+    
+    <div style="text-align: center;color:rgb(75, 70, 70);font-size: 12px;margin-top: 7px;padding: 8px;font-family: Segoe;font-weight: bold;"> 
+      REPORTES ESTADÍSTICOS 
+        
+    </div>
+ 
+  </div>
+
+
 <ion-content>
 
-    <div class="chart-container">
-        <canvas id="barra_falla" width="400" height="400"></canvas><br><br>
-        <canvas id="torta_falla" width="400" height="400"></canvas><br><br>
-        <canvas id="linea_falla" width="400" height="400"></canvas><br><br>
-        <canvas id="anillo_falla" width="400" height="400"></canvas>
-    </div>
+    <ion-row>
+
+        <ion-col size-lg="6" size-md="6" size-sm="6" size="12" >
+          <div class="tarjeta_estadistico" >
+              <div style="background: #fff;" >
+                  <div class="tarjeta-titulo"> 
+                  GENERACIÓN VS DEMANDA<br>
+                  (Expresados en MW) <br>
+                  Generación {{linea_ultima_generacion}} Demanda {{linea_ultima_demanda}} <br>
+                  {{linea_ultima_fecha}} <br>
+                  </div>
+              </div>
+              <canvas id="linea_falla" width="300" height="289" style="padding: 2px;" ></canvas>
+              <br>
+          </div>
+      </ion-col>
+      <br>
+
+        <ion-col size-lg="6" size-md="6" size-sm="6" size="12" >
+            <div class="tarjeta_estadistico" >
+                <div style="background: #fff;">
+                    <div class="tarjeta-titulo"> 
+                    DEMANDA POR ZONAS <br>
+                    (Expresados en MW) <br>
+                    Total {{torta_total_demanda}}
+                    </div>
+                
+                </div>
+                <canvas id="torta_falla" width="300" height="350"></canvas>
+                <br>
+            </div>
+        </ion-col>
+        <br>
+
+        <ion-col size-lg="6" size-md="6" size-sm="6" size="12" >
+            <div class="tarjeta_estadistico" >
+                <div style="background: #fff;" >
+                    <div class="tarjeta-titulo"> 
+                        GENERACIÓN TOTAL POR TIPO <br>
+                        (Expresados en MW) <br>
+                        Total {{anillo_suma_total}} <br>
+                        {{anillo_ultima_fecha}} <br>
+                       
+                    </div>
+                </div>
+                <canvas id="anillo_falla" width="300" height="350"></canvas> 
+                <br>
+            </div>
+        </ion-col>
+        <br>
+
+        
+
+
+        <ion-col size-lg="6" size-md="6" size-sm="6" size="12" >
+          <div class="tarjeta_estadistico" >
+              <div style="background: #fff;" >
+                <div class="tarjeta-titulo"> 
+                    TOP 5 LÍNEAS 230 kV CON MAYOR TRANSFERENCIA <br>
+                    (Expresados en MW) <br>
+                </div>
+              </div>
+
+              <ion-grid class="ion-margin" style="font-size: 0.6em;">
+                <ion-row  style=" border: 0.5px solid #d0d0d0;font-weight: bold;background:#99f07c ;">
+                  <ion-col size="8">LÍNEA</ion-col>
+                  <ion-col size="4">MW</ion-col>
+                </ion-row>
+                <ion-row *ngFor="let item of tabla_linea_230; index as i" style=" border: 0.5px solid #d0d0d0;">
+                  <ion-col size="8">{{ item.linea }}</ion-col>
+                  <ion-col size="4">{{ item.valor }}</ion-col>
+                </ion-row>
+              </ion-grid>
+              <!-- <canvas id="barra" width="300" height="350"></canvas>  -->
+              <br>
+          </div>
+        </ion-col>
+        <br>
+        <ion-col size-lg="6" size-md="6" size-sm="6" size="12" >
+          <div class="tarjeta_estadistico" >
+              <div style="background: #fff;" >
+                <div class="tarjeta-titulo"> 
+                    TOP 5 LÍNEAS 115 kV CON MAYOR TRANSFERENCIA <br>
+                    (Expresados en MW) <br>
+                </div>
+              </div>
+
+              <ion-grid class="ion-margin" style="font-size: 0.6em;">
+                <ion-row  style=" border: 0.5px solid #d0d0d0;font-weight: bold;background:#7777e1 ; ">
+                  <ion-col size="8">LÍNEA</ion-col>
+                  <ion-col size="4">MW</ion-col>
+                </ion-row>
+                <ion-row *ngFor="let item of tabla_linea_115; index as i" style=" border: 0.5px solid #d0d0d0;">
+                  <ion-col size="8">{{ item.linea }}</ion-col>
+                  <ion-col size="4">{{ item.valor }}</ion-col>
+                </ion-row>
+              </ion-grid>
+              <!-- <canvas id="barra" width="300" height="350"></canvas>  -->
+              <br>
+          </div>
+        </ion-col>
+        <br>
+        <ion-col size-lg="6" size-md="6" size-sm="6" size="12" >
+          <div class="tarjeta_estadistico" >
+              <div style="background: #fff;" >
+                <div class="tarjeta-titulo"> 
+                    TOP 5 LÍNEAS 69 kV CON MAYOR TRANSFERENCIA <br>
+                    (Expresados en MW) <br>
+                </div>
+              </div>
+
+              <ion-grid class="ion-margin" style="font-size: 0.6em;">
+                <ion-row  style=" border: 0.5px solid #d0d0d0;font-weight: bold;background:#ed7b7b ;">
+                  <ion-col size="8">LÍNEA</ion-col>
+                  <ion-col size="4">MW</ion-col>
+                </ion-row>  
+                <ion-row *ngFor="let item of tabla_linea_69; index as i" style=" border: 0.5px solid #d0d0d0;">
+                  <ion-col size="8">{{ item.linea }}</ion-col>
+                  <ion-col size="4">{{ item.valor }}</ion-col>
+                </ion-row>
+              </ion-grid>
+              <!-- <canvas id="barra" width="300" height="350"></canvas>  -->
+              <br>
+          </div>
+        </ion-col>
+        <br>
+
+    </ion-row>
+  
+    <br><br>
     
 </ion-content>
