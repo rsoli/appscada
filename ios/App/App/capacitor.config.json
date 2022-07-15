@@ -1,6 +1,6 @@
 {
 	"appId": "com.ende.scada",
-	"appName": "Scada",
+	"appName": "ETR-O&M",
 	"webDir": "www",
 	"bundledWebRuntime": false
 }

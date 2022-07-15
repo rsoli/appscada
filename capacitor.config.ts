@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.ende.scada',
-  appName: 'Scada',
+  appName: 'ETR-O&M',
   webDir: 'www',
   bundledWebRuntime: false
 };

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { EventoModelo } from '../../modelo/evento-modelo';
 import { EventosService } from '../../servicio/eventos.service';
 import { IonContent } from '@ionic/angular';
@@ -7,12 +7,11 @@ import { LoadingController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 
-
-
 @Component({
   selector: 'app-eventos',
   templateUrl: './eventos.page.html',
   styleUrls: ['./eventos.page.scss'],
+ 
 })
 export class EventosPage implements OnInit {
 
@@ -37,8 +36,7 @@ export class EventosPage implements OnInit {
   constructor(
     private evento_servicio:EventosService,
     private loadingController:LoadingController,
-    private router: Router,
-
+    private router: Router
   ) { 
     this.activar_fechas = this.activar_fechas.bind(this);
   }
@@ -188,3 +186,4 @@ export class EventosPage implements OnInit {
   }
 
 }
+

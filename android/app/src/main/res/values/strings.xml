@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Scada</string>
-    <string name="title_activity_main">Scada</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="app_name">ETR-O&amp;M</string>
+    <string name="title_activity_main">ETR-O&amp;M</string>
+    <string name="package_name">com.ende.scada</string>
+    <string name="custom_url_scheme">com.ende.scada</string>
 </resources>

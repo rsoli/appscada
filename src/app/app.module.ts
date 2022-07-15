@@ -15,9 +15,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
+import { MomentPipe } from './moment.pipe';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, MomentPipe],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule ,
      IonicStorageModule.forRoot({
       name: 'bdscada',
