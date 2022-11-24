@@ -1,0 +1,160 @@
+<ion-header style="border-bottom: 0px solid #fff;">
+
+  <ion-toolbar>
+  
+  
+    <ion-buttons slot="start">
+      <ion-back-button slot="icon-only" icon="arrow-back-outline" style="color: white ;" defaultHref="/" text=""  mode="ios"> </ion-back-button> 
+    </ion-buttons>
+
+
+    <div style="text-align: center;margin-top: 5px;padding-bottom: 5px;">
+      <ion-img style="height: 40px;"  src="./assets/icon/logo.png"></ion-img>
+    </div>
+
+   <ion-button slot="end" fill="clear" id="open-date-input-2" > 
+     
+      <ion-icon name="funnel" style="color:white;"></ion-icon> 
+  </ion-button> 
+
+    <!-- <ion-title class="ion-text-capitalize"></ion-title> -->
+
+  </ion-toolbar>
+
+</ion-header>
+
+<div style="background: #fff;">
+    
+  <div style="text-align: center;color:rgb(75, 70, 70);font-size: 12px;margin-top: 7px;padding: 8px;font-family: Segoe;font-weight: bold;"> 
+    DATOS DEL TIEMPO<BR>
+    REGIONAL COCHABAMBA <BR>
+    {{fecha_hora_actual}}
+  </div>
+
+</div>
+
+<ion-content>
+
+  <!-- <div style="position: relative;height: 100px;background: blue;">
+    hola
+  </div> -->
+
+
+
+ 
+
+
+  <div style="position: absolute; top: 0; left: 0;">
+
+    <ion-list style="background:rgba(255, 255, 255, 0)">
+    
+      <!-- <ion-item *ngFor="let c of componentes">
+        {{c.name}}
+      </ion-item> -->
+      <!-- <ion-button routerLink="/fallas">Fallas</ion-button> 
+        -->
+  
+      <ion-grid>
+
+
+        <ion-row>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/fallas">
+                  <div>
+                    <ion-img class="img_menu"  src="./assets/clima/temperatura.png"></ion-img>
+                  </div>
+                  <div class="text_menu">
+                    Temperataura <br>
+                    {{temperatura}}
+                  </div>
+              </div>
+            </div>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/estadistica">
+                <div>
+                  <ion-img class="img_menu"  src="./assets/clima/humedad.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Humedad
+                  <br>
+                  {{humedad}}
+                </div>
+              </div>
+            </div>
+          </ion-col>
+
+        </ion-row>
+      
+        <ion-row>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/turno">
+                <div>
+                  <ion-img class="img_menu"  src="./assets/clima/viento.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Viento<br>
+                  {{velocidad_viento}}
+                </div>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/lineas">
+                <div>
+                  <ion-img class="img_menu" src="./assets/clima/direccion_viento.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Dir. Viento<br>
+                  {{direccion_viento}}
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+  
+        <ion-row>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/estadistica">
+                <div>
+                  <ion-img class="img_menu"  src="./assets/clima/cubierto_nubes.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Nubes
+                  <br>
+                  {{nubes}}
+                </div>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/mantenimiento">
+                <div>
+                  <ion-img class="img_menu"  src="./assets/clima/tormenta.png"></ion-img>
+                </div>
+                <div class="text_menu">
+                  Lluvia<br>
+                  {{precipitacion_intencidad}}
+                </div>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+  
+
+        
+      </ion-grid>
+  
+    </ion-list>
+
+  </div>
+
+
+</ion-content>

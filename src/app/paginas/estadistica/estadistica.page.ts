@@ -364,6 +364,7 @@ export class EstadisticaPage implements OnInit {
 
   }
   GraficoLinea(){
+// console.log("ver linea ",this.linea_label_demanda,this.linea_generacion);
 
     const data = {
       labels: this.linea_label_demanda,

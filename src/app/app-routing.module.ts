@@ -42,6 +42,10 @@ const routes: Routes = [
     path: '',
     redirectTo: 'inicio',
     pathMatch: 'full'
+  },
+  {
+    path: 'clima',
+    loadChildren: () => import('./paginas/clima/clima.module').then( m => m.ClimaPageModule)
   }
 
 
