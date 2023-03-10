@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ClimaService } from '../../servicio/clima.service';
 import { LoadingController } from '@ionic/angular';
-import { Chart, LegendItem, registerables } from 'chart.js';
-import * as moment from 'moment';
-
-Chart.register(...registerables);
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+declare var google;
 
 @Component({
   selector: 'app-clima',
@@ -13,135 +11,97 @@ Chart.register(...registerables);
 })
 export class ClimaPage implements OnInit {
 
-  location:string='';
-  fields:any=[ "precipitationIntensity",
-  "precipitationType",
-  "windSpeed",
-  "windGust",
-  "windDirection",
-  "temperature",
-  "temperatureApparent",
-  "cloudCover",
-  "cloudBase",
-  "cloudCeiling",
-  "weatherCode",
-  "humidity"
-];
+  API_KEY = '81dHjlMAp8TTJ5Mk77R23mL7cnj2iRRD'; 
+  DATA_FIELD = 'precipitationIntensity';
+  TIMESTAMP = (new Date()).toISOString(); 
 
-  startTime:string='';
-  endTime:string='';
-  timesteps:any=["current", "1h", "1d"];
-  units:string='imperial';
-  timezone:string='America/La_Paz';
-
-  loading: HTMLIonLoadingElement;
-
-
-  private linea_generacion:any;
-  private linea_label_demanda:any;
-
-  temperatura:string='';
-  precipitacion_intencidad:string = '';
-  velocidad_viento:string ='';
-  nubes:string='';
-  direccion_viento:string='';
-  humedad:string='';
-  fecha_hora_actual='';
+  map=null;
 
   constructor(
-    private ClimaService:ClimaService,
-    private loadingController:LoadingController
   ) { }
 
   ngOnInit() {
-    this.GetClima();
+    this.loadMap();
   }
-
-
-  async GetClima(){
-
-    const date =moment.utc(new Date()).add(0, 'minutes');
-    this.startTime=date.format('YYYY-M-D')+'T'+date.format('HH:mm:ss')+'Z';
-    this.fecha_hora_actual='Fecha '+date.format('D-M-YYYY');
-    const dateStart = moment.utc(date).add(1, 'day'); 
-    const date2= moment(dateStart).add(1, 'days');
-    this.endTime = date2.format('YYYY-M-D')+'T'+date.format('HH:mm:ss')+'Z';
-    console.log("FECHA MAÑANA ",this.endTime);
-                     
-    // this.startTime = '2022-11-17T16:48:00Z';
-    // this.endTime = this.startTime;
-
-
-
-    // this.startTime = '2022-11-17T16:16:00Z';
-    //this.endTime = '2022-11-20T16:16:00Z';
-
-    this.LocationCochabamba();
-    await this.mostrar_loading();
-    this.ClimaService.get_tiempo(this.location,this.fields,this.startTime,this.endTime,this.timesteps,this.units,this.timezone).subscribe(data=>{
-      
-      this.ocultar_loading();
-      // console.log("tiempo ", data );
-      
-      console.log("tiempo ", JSON.parse(JSON.stringify(data)).data.timelines[0].intervals );
-      console.log("tiempo2 ", JSON.parse(JSON.stringify(data)).data);
-
-      let linea_label= JSON.parse(JSON.stringify(data)).data.timelines[0].intervals;
-
-      this.linea_label_demanda=[];
-      this.linea_generacion=[];
-
-
-      this.temperatura = (JSON.parse(JSON.stringify(data)).data.timelines[0].intervals[0].values.temperature)+ 'º';
-      this.precipitacion_intencidad =(JSON.parse(JSON.stringify(data)).data.timelines[0].intervals[0].values.precipitationIntensity)+ ' pulg./h';
-      this.velocidad_viento = (JSON.parse(JSON.stringify(data)).data.timelines[0].intervals[0].values.windSpeed)+ ' mph';
-      this.nubes = (JSON.parse(JSON.stringify(data)).data.timelines[0].intervals[0].values.cloudCover)+ '%';
-      this.direccion_viento = (JSON.parse(JSON.stringify(data)).data.timelines[0].intervals[0].values.windDirection)+ ' grados';
-      this.humedad = (JSON.parse(JSON.stringify(data)).data.timelines[0].intervals[0].values.humidity)+ '%';
-   /*   for (let index = 0; index < linea_label.length; index++) {
-      
-        let anillo_fecha_aux =  moment( linea_label[index].startTime );
-        let fecha= anillo_fecha_aux.format('D/M/YYYY');
-
-        this.linea_label_demanda.push(fecha);
-        this.linea_generacion.push(linea_label[index].values.temperature);
-      }
-
-
-
-      if(this.linea){
-        this.linea.destroy();
-      }
-*/
-      console.log("generado ",this.linea_label_demanda,this.linea_generacion);
-      
-   
-    },error=>{
-
-      this.ocultar_loading();
-      console.log("ver errores ",JSON.stringify(error));
-
-    }) 
-
-
-  }
-
-  LocationCochabamba(){
-    this.location='-66.1653224, -17.4139766';
-  }
-  async mostrar_loading() {
-    this.loading = await this.loadingController.create({
-      cssClass: 'my-custom-class',
-      message: 'Cargando ...',
+  loadMap() {
+    // create a new map by passing HTMLElement
+    const mapEle: HTMLElement = document.getElementById('map2');
+    // create LatLng object
+    const myLatLng = {lat: -17.20649164, lng:  -64.52166218};
+    // create map
+    this.map = new google.maps.Map(mapEle, {
+      center: myLatLng,
+      zoom: 5,
+      //mapTypeId: google.maps.MapTypeId.HYBRID
     });
-    await this.loading.present();
+  
+    
+    google.maps.event.addListenerOnce(this.map, 'idle', () => {
+      mapEle.classList.add('show-map');
+
+    });
+  // inject the tile layer
+  let imageMapType = new google.maps.ImageMapType({
+    getTileUrl: function(coord, zoom) {
+      if (zoom > 12) {
+        return null;
+      }
+
+      
+      let TIMESTAMP = (new Date()).toISOString(); 
+      let DATA_FIELD = "precipitationIntensity";
+      var postTimelinesParameters = {
+        location: [40.758, -73.9855],
+        fields: [
+          "precipitationIntensity",
+          "precipitationType",
+          "windSpeed",
+          "windGust",
+          "windDirection",
+          "temperature",
+          "temperatureApparent",
+          "cloudCover",
+          "cloudBase",
+          "cloudCeiling",
+          "weatherCode",
+        ],
+        units: "imperial",
+        timesteps: ["current"],
+        timezone: "America/New_York",
+      };
+
+      // console.log("zoom ",zoom);
+      //console.log("coord ",coord.x);
+      //console.log("coord ",coord.y);
+     // console.log("data field ",this.DATA_FIELD);
+      //console.log("TIMESTAMP ",TIMESTAMP);
+     // console.log("api key  ",this.API_KEY);
+
+      //lightningFlashRateDensity  probalidad de rayo
+     // precipitationIntensity    calor
+     //hailBinary hielo solido no relevante
+     //fireIndex  fuego
+     //soilMoistureVolumetric0To10  soilMoistureVolumetric10To40 soilMoistureVolumetric40To100  soilMoistureVolumetric100To200 soilMoistureVolumetric0To200  volumen de agua retenido en los espacios de las partículas
+     //temperatura suelo soilTemperature0To10   soilTemperature10To40  soilTemperature40To100  soilTemperature100To200  soilTemperature0To200
+     //descargas
+     //cloudCover cloudBase cloudCeiling
+
+     //key endemaps 81dHjlMAp8TTJ5Mk77R23mL7cnj2iRRD
+
+      let API_KEY = 'kgKdoIiNMsWmIFVLwmdnvuBq4UAryObm'; 
+
+      //return 'https://api.tomorrow.io/v4/map/tile/'+zoom+'/'+coord.x+'/'+'/'+coord.y+'/'+'/'+DATA_FIELD+'/'+TIMESTAMP+'.png?apikey=61dec0f9a896790008924ef7';
+      return `https://api.tomorrow.io/v4/map/tile/${zoom}/${coord.x}/${coord.y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`;
+    },
+    tileSize: new google.maps.Size(256, 256)
+  });
+
+
+  this.map.overlayMapTypes.push(imageMapType);
+  
+
   }
-  ocultar_loading(){
-    try {
-      this.loading.dismiss();
-    } catch (error) {
-      console.log("Error al ocultar loading ",error);
-    }
-  }
+
+
 
 }
