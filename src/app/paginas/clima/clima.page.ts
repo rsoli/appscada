@@ -3,6 +3,7 @@ import { ClimaService } from '../../servicio/clima.service';
 import { LoadingController } from '@ionic/angular';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 declare var google;
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-clima',
@@ -22,6 +23,81 @@ export class ClimaPage implements OnInit {
 
   ngOnInit() {
     this.loadMap();
+    //this.prueba();
+  }
+  prueba(){
+
+
+    // const fetch = require("node-fetch");
+    // const queryString = require('query-string');
+    //const moment = require("moment");
+    
+    // set the Timelines GET endpoint as the target URL
+    const getTimelineURL = "https://api.tomorrow.io/v4/timelines";
+    
+    // get your key from app.tomorrow.io/development/keys
+    const apikey = "81dHjlMAp8TTJ5Mk77R23mL7cnj2iRRD";
+    
+    // pick the location, as a latlong pair
+    let location = [40.758, -73.9855];
+    
+    // list the fields
+    const fields = [
+      "precipitationIntensity",
+      "precipitationType",
+      "windSpeed",
+      "windGust",
+      "windDirection",
+      "temperature",
+      "temperatureApparent",
+      "cloudCover",
+      "cloudBase",
+      "cloudCeiling",
+      "weatherCode",
+    ];
+    
+    // choose the unit system, either metric or imperial
+    const units = "imperial";
+    
+    // set the timesteps, like "current", "1h" and "1d"
+    const timesteps = ["current", "1h", "1d"];
+    
+    // configure the time frame up to 6 hours back and 15 days out
+    const now = moment.utc();
+    const startTime = moment.utc(now).add(0, "minutes").toISOString();
+    const endTime = moment.utc(now).add(1, "days").toISOString();
+    
+    // specify the timezone, using standard IANA timezone format
+    const timezone = "America/La_Paz";
+    
+    // request the timelines with all the query string parameters as options
+    const getTimelineParameters =  {
+        apikey,
+        location,
+        fields,
+        units,
+        timesteps,
+        startTime,
+        endTime,
+        timezone,
+    };
+
+    let API_KEY = 'kgKdoIiNMsWmIFVLwmdnvuBq4UAryObm'; 
+
+
+     fetch(getTimelineURL + '/?token=' + API_KEY+'&'+JSON.stringify(getTimelineParameters)+ '/?token=' + API_KEY+'&', { method: 'GET'})
+     .then(response => response.json())
+     .then(data => {
+      console.log(data);
+      
+         //alert(JSON.stringify(data));
+     })
+     .catch(error => {
+      console.log("error",error);
+         //alert(JSON.stringify(error));
+     })
+
+
   }
   loadMap() {
     // create a new map by passing HTMLElement
@@ -49,7 +125,7 @@ export class ClimaPage implements OnInit {
 
       
       let TIMESTAMP = (new Date()).toISOString(); 
-      let DATA_FIELD = "precipitationIntensity";
+      let DATA_FIELD = "cloudCover";
       var postTimelinesParameters = {
         location: [40.758, -73.9855],
         fields: [

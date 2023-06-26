@@ -92,6 +92,8 @@
     </div>
   </div>
 
+  <iframe *ngIf="pdfLink" [src]="pdfLink" width="100%" height="100%" frameborder="0" ></iframe>
+
 </ion-content>
 
 
@@ -212,12 +214,34 @@
 
             </ion-col>
 
-
-
- 
-
-
         </ion-row>
+
+
+        <ion-row>
+          <ion-col size="12"> 
+              <div class="tarjeta-titulo" style="margin-left: 9px;font-size: 15px;">
+                  Tomorrow
+              </div>
+              
+          </ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col size="12"> 
+
+              <div style="text-align: center;">
+
+                  <ion-item (click)="abrir_selector_tomorrow(selector_tomorrow)">
+                    <ion-select placeholder="Selecccionar capa" #selector_tomorrow style="pointer-events: none" [interfaceOptions]="agregar_check_todo_tomorrow" [(ngModel)]="select_tipo_capa_tomorrow" multiple="true" [value]="basket2">
+                    <ion-select-option *ngFor="let capa of opcion_tipo_capa_tomorrow" [value]="option">{{capa.name}}</ion-select-option>
+                    </ion-select>
+                  </ion-item> 
+
+
+              </div>
+
+          </ion-col>
+      </ion-row>
+
 
       </ion-content>
 
@@ -314,6 +338,8 @@
               </ion-col>
            
             </ion-row>
+
+
         </ion-grid>
 
 
@@ -323,3 +349,5 @@
 
   </ng-template>
 </ion-modal>
+
+

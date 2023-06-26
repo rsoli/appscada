@@ -6,6 +6,12 @@ import { MantenimientosService } from '../../servicio/mantenimientos.service';
 import * as moment from 'moment';
 import { ClimaService } from '../../servicio/clima.service';
 
+import { DomSanitizer} from '@angular/platform-browser';
+
+
+
+
+
 declare var google;
 @Component({
   selector: 'app-lineas',
@@ -59,6 +65,7 @@ export class LineasPage implements OnInit {
   listener;
   seleccionar_todo_subestacion: any;
   checkBoxes: any;
+  lista_subestacion:any;
 
   searchQuery:any;
   
@@ -87,6 +94,24 @@ export class LineasPage implements OnInit {
     { name: 'Tesa', $id: 4 }
   ];
 
+
+  opcion_tipo_capa_tomorrow = [
+    { name: 'Mapa de calor', $id: 1 ,codigo:"precipitationIntensity"},
+    { name: 'Probabilidad de rayo', $id: 2, codigo:"lightningFlashRateDensity" },
+    { name: 'Base de la nube', $id: 2, codigo:"cloudBase" },
+    { name: 'Techo de nube', $id: 2, codigo:"cloudCeiling" },
+    { name: 'Cubierto de nubes', $id: 2, codigo:"cloudCover" },
+    
+    
+    
+  ];
+  select_tipo_capa_tomorrow:any = [
+    // 'Mapa de calor',
+    // 'Probabilidad de rayo'
+  ];
+  seleccionar_todo_tomorrow: any;
+  checkBoxes_tomorrow: any;
+
   agregar_check_todo_subestacion: any = {
     // header: 'Lista de Subestación',
     // subHeader: 'Select All:',
@@ -101,6 +126,10 @@ export class LineasPage implements OnInit {
 
   agregar_check_todo_lineas_transmision: any = {
     message: ' <ion-checkbox id="seleccionar_todo_lineas_transmision"></ion-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Todos'
+  };
+
+  agregar_check_todo_tomorrow: any = {
+    message: ' <ion-checkbox id="seleccionar_todo_tomorrow"></ion-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Todos'
   };
 
   ////////////////
@@ -137,14 +166,20 @@ export class LineasPage implements OnInit {
   fecha_hora_actual='';
   display_name = '';
 
+  capas_mapa=new Array();
   
   ////////////////////fin clima////////
+
+  /////pdf/////
+  pdfLink:any; 
+  ////fi  pdf //
   constructor(
     @Inject(DOCUMENT) private document: Document, private renderer: Renderer2,
     public toastController: ToastController,
     private mantenimiento_servicio:MantenimientosService,
     private loadingController:LoadingController,
     private ClimaService:ClimaService,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -292,6 +327,46 @@ export class LineasPage implements OnInit {
     })
     
   }
+  abrir_selector_tomorrow(selector_tomorrow) {
+
+    // console.log("llega selector lineas");
+    
+    console.log("llega dentro0 ",selector_tomorrow);
+    selector_tomorrow.open().then((alert)=>{
+      this.seleccionar_todo_tomorrow = this.document.getElementById("seleccionar_todo_tomorrow");
+      this.checkBoxes_tomorrow = this.document.getElementsByClassName("alert-checkbox");
+
+      
+
+      this.seleccionar_todo_tomorrow = this.renderer.listen(this.seleccionar_todo_tomorrow, 'click', () => {
+        
+        
+          if (this.seleccionar_todo_tomorrow.checked) {
+            console.log("llega dentro1 ",this.checkBoxes_tomorrow);
+            
+            for (let checkbox of this.checkBoxes_tomorrow) {
+
+              if (checkbox.getAttribute("aria-checked")==="false") {
+                (checkbox as HTMLButtonElement).click();
+                console.log("llega dentro2 ",this.checkBoxes_tomorrow);
+              };
+            };
+          } else {
+           
+            for (let checkbox of this.checkBoxes_tomorrow) {
+              if (checkbox.getAttribute("aria-checked")==="true") {
+                (checkbox as HTMLButtonElement).click();
+                console.log("llega dentro3 ",checkbox);
+              };
+            };
+          }
+      });
+      alert.onWillDismiss().then(()=>{
+        this.seleccionar_todo_tomorrow();
+      });
+    })
+    
+  }
   ocultar_detalle(){
 
     this.hide_detalle=!this.hide_detalle;
@@ -316,6 +391,7 @@ export class LineasPage implements OnInit {
     this.buscar_subestacion();
     this.isModalOpen=false;
 
+    this.agregarTomorrow();
 
     
   }
@@ -345,8 +421,135 @@ export class LineasPage implements OnInit {
 
     this.click_mapa();
 
+    this.agregarTomorrow();
+
     
   }
+  quitarTomorrow(){
+    this.map.overlayMapTypes.removeAt(this.capas_mapa[0]);
+    this.map.overlayMapTypes.removeAt(this.capas_mapa[1]);
+    this.map.overlayMapTypes.removeAt(this.capas_mapa[2]);
+    this.map.overlayMapTypes.removeAt(this.capas_mapa[3]);
+    this.map.overlayMapTypes.removeAt(this.capas_mapa[4]);
+  }
+  agregarTomorrow(){
+    
+    //console.log("tomorrow ",this.select_tipo_capa_tomorrow);
+    this.quitarTomorrow();
+
+    for (let index = 0; index < this.select_tipo_capa_tomorrow.length; index++) {
+      if(this.select_tipo_capa_tomorrow[index]=="Mapa de calor"){
+          // inject the tile layer
+          this.capas_mapa[0] = new google.maps.ImageMapType({
+            getTileUrl: function(coord, zoom) {
+              if (zoom > 12) {
+                return null;
+              }
+              
+              let TIMESTAMP = (new Date()).toISOString(); 
+              let DATA_FIELD = "precipitationIntensity";
+
+              let API_KEY = 'kgKdoIiNMsWmIFVLwmdnvuBq4UAryObm'; 
+
+              return `https://api.tomorrow.io/v4/map/tile/${zoom}/${coord.x}/${coord.y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`;
+            },
+            tileSize: new google.maps.Size(256, 256)
+          });
+
+          this.map.overlayMapTypes.push(this.capas_mapa[0]);
+      }
+      if(this.select_tipo_capa_tomorrow[index]=="Probabilidad de rayo"){
+
+          this.capas_mapa[1] = new google.maps.ImageMapType({
+            getTileUrl: function(coord, zoom) {
+              if (zoom > 12) {
+                return null;
+              }
+              
+              let TIMESTAMP = (new Date()).toISOString(); 
+              let DATA_FIELD = "lightningFlashRateDensity";
+        
+              let API_KEY = 'kgKdoIiNMsWmIFVLwmdnvuBq4UAryObm'; 
+        
+              return `https://api.tomorrow.io/v4/map/tile/${zoom}/${coord.x}/${coord.y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`;
+            },
+            tileSize: new google.maps.Size(256, 256)
+          });
+        
+          this.map.overlayMapTypes.push(this.capas_mapa[1]);
+
+      }
+      if(this.select_tipo_capa_tomorrow[index]=="Base de la nube"){
+
+        this.capas_mapa[2] = new google.maps.ImageMapType({
+          getTileUrl: function(coord, zoom) {
+            if (zoom > 12) {
+              return null;
+            }
+            
+            let TIMESTAMP = (new Date()).toISOString(); 
+            let DATA_FIELD = "cloudBase";
+      
+            let API_KEY = 'kgKdoIiNMsWmIFVLwmdnvuBq4UAryObm'; 
+      
+            return `https://api.tomorrow.io/v4/map/tile/${zoom}/${coord.x}/${coord.y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`;
+          },
+          tileSize: new google.maps.Size(256, 256)
+        });
+      
+        this.map.overlayMapTypes.push(this.capas_mapa[2]);
+
+      }
+      if(this.select_tipo_capa_tomorrow[index]=="Techo de nube"){
+
+        this.capas_mapa[3] = new google.maps.ImageMapType({
+          getTileUrl: function(coord, zoom) {
+            if (zoom > 12) {
+              return null;
+            }
+            
+            let TIMESTAMP = (new Date()).toISOString(); 
+            let DATA_FIELD = "cloudCeiling";
+      
+            let API_KEY = 'kgKdoIiNMsWmIFVLwmdnvuBq4UAryObm'; 
+      
+            return `https://api.tomorrow.io/v4/map/tile/${zoom}/${coord.x}/${coord.y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`;
+          },
+          tileSize: new google.maps.Size(256, 256)
+        });
+      
+        this.map.overlayMapTypes.push(this.capas_mapa[3]);
+
+      }
+      if(this.select_tipo_capa_tomorrow[index]=="Cubierto de nubes"){
+
+        this.capas_mapa[4] = new google.maps.ImageMapType({
+          getTileUrl: function(coord, zoom) {
+            if (zoom > 12) {
+              return null;
+            }
+            
+            let TIMESTAMP = (new Date()).toISOString(); 
+            let DATA_FIELD = "cloudCover";
+      
+            let API_KEY = 'kgKdoIiNMsWmIFVLwmdnvuBq4UAryObm'; 
+      
+            return `https://api.tomorrow.io/v4/map/tile/${zoom}/${coord.x}/${coord.y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`;
+          },
+          tileSize: new google.maps.Size(256, 256)
+        });
+      
+        this.map.overlayMapTypes.push(this.capas_mapa[4]);
+
+      }
+
+      
+
+    }
+
+
+  }
+
   click_mapa(){
       ////////////////////////click////////////////////////////////////
       const myLatLng = {lat: -17.20649164, lng:  -64.52166218};
@@ -365,6 +568,7 @@ export class LineasPage implements OnInit {
       this.location=coordenadas_click["lng"]+', '+coordenadas_click["lat"];
     
       this.mostrar_loading();//agregar loading nuevamente
+     
       await this.GetUbicacion(coordenadas_click["lat"],coordenadas_click["lng"],infoWindow,mapsMouseEvent);
        
       this.ocultar_loading();
@@ -403,8 +607,9 @@ export class LineasPage implements OnInit {
     // this.startTime = '2022-11-17T16:16:00Z';
     //this.endTime = '2022-11-20T16:16:00Z';
 
-  
-    this.ClimaService.get_tiempo(this.location,this.fields,this.startTime,this.endTime,this.timesteps,this.units,this.timezone).subscribe(data=>{
+    console.log("ver datos  ",this.location);
+      
+    this.ClimaService.get_tiempo(this.location,this.fields,this.startTime,this.endTime,this.timesteps,this.units,"UTC").subscribe(data=>{
       
       this.ocultar_loading();
       console.log("tiempo get tiempo  ", data );
@@ -461,6 +666,7 @@ export class LineasPage implements OnInit {
 
 
   }
+
   cargar_lugar(){
 
     if(this.select_lineas_transmision[3]=='Ende Transmisión' || this.select_lineas_transmision[2]=='Ende Transmisión' || this.select_lineas_transmision[1]=='Ende Transmisión' || this.select_lineas_transmision[0]=='Ende Transmisión'){
@@ -1159,154 +1365,181 @@ export class LineasPage implements OnInit {
   }
   cargar_opcion_subestacion() {
 
-    let data=[
-      {"type":"FeatureCollection", "features":[
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.65650068496544,-21.99921948187739,0]},"properties":{"name":"Punto Frontera BOL-ARG"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.30982441009712,-22.708083813733,0]},"properties":{"name":"SE Bermejo"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.61058017326934,-21.71813902449356,0]},"properties":{"name":"SE Angostura"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.75045899651332,-17.17824670233878,0]},"properties":{"name":"SE San Jose"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.11641536032718,-17.4278307015434,0]},"properties":{"name":"SE Valle Hermoso"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.442465889723,-17.00993316515525,0]},"properties":{"name":"SE Villa Tunari"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.16118274339239,-16.99904057863463,0]},"properties":{"name":"SE Chimore"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.04470448002493,-17.96952301957552,0]},"properties":{"name":"SE Vinto"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.28274648659279,-19.05300348244362,0]},"properties":{"name":"SE Aranjuez"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.52663221618302,-17.21179368194152,0]},"properties":{"name":"SE Carrasco"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.51930182090764,-17.2007158622496,0]},"properties":{"name":"SE Entre Rios"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.51573972644422,-17.19625142230912,0]},"properties":{"name":"SE Entre Rios II"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.23099774556704,-20.93216724284703,0]},"properties":{"name":"SE Atocha"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.22426213172135,-20.94412788941596,0]},"properties":{"name":"SE Telamayu"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.80680508186643,-18.24082858548265,0]},"properties":{"name":"SE Cataricagua"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.56053582350246,-15.84446656251573,0]},"properties":{"name":"SE Caranavi"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.5760187386107,-18.41068892581163,0]},"properties":{"name":"SE Catavi"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.80058309235481,-19.60758270695044,0]},"properties":{"name":"SE Potosi (Agua Dulce)"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.29306478191168,-17.73174721832912,0]},"properties":{"name":"SE  Irpa Irpa"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.72197744355935,-19.55192277952019,0]},"properties":{"name":"SE Karachipampa"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.83507021420866,-16.28616817016817,0]},"properties":{"name":"SE Chuspipata"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.70756681789027,-19.48221677058557,0]},"properties":{"name":"SE Ecebol Potosi"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.35067595797864,-20.75440224493677,0]},"properties":{"name":"Transición Aéreo / Subterráneo (salar)"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.36429307436651,-20.5805707358719,0]},"properties":{"name":"SE Salar"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.27639329576006,-17.39645218091049,0]},"properties":{"name":"SE Jeruyo"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.22106283175049,-17.57774127243723,0]},"properties":{"name":"SE Santivañez II"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.14655587160836,-17.53450316371041,0]},"properties":{"name":"SE Warnes"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.15654066334618,-21.13371478482723,0]},"properties":{"name":"SE Litio"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-68.16971779857461,-16.69116579947541,0]},"properties":{"name":"SE Mazocruz"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.21750280535679,-18.06508621530076,0]},"properties":{"name":"SE Las Brechas"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.10949436549211,-17.81167816310012,0]},"properties":{"name":"SE Pagador"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-68.3606514821168,-16.64595986127971,0]},"properties":{"name":"SE Contorno Bajo"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.18855229952105,-15.94547263607925,0]},"properties":{"name":"SE Guarayos"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.79571638865379,-14.83594121707191,0]},"properties":{"name":"SE El Paraiso"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.75469016004978,-21.42634908071289,0]},"properties":{"name":"SE Torre Huayco"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.1423253942143,-18.38404025694166,0]},"properties":{"name":"SE El Dorado"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.80310371547188,-20.56388879458373,0]},"properties":{"name":"SE Uyuni"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.76664045540736,-20.57089979467764,0]},"properties":{"name":"SE Solar Uyuni"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.6859576720347,-19.52044424290286,0]},"properties":{"name":"SE La Plata"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-62.8532106259545,-17.82243754836708,0]},"properties":{"name":"SE San Julián"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-62.640538141748,-17.06145754036263,0]},"properties":{"name":"SE Los Troncos"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.89320442614581,-17.39370877302568,0]},"properties":{"name":"SE Yapacani"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.54230710537596,-17.38971896463691,0]},"properties":{"name":"SE Las Lomas"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.28223511540872,-17.57502269773241,0]},"properties":{"name":"SE La Bélgica"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.77307819353878,-17.15721169289018,0]},"properties":{"name":"SE Miguelito"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.03646317331952,-17.71409017443765,0]},"properties":{"name":"SE Caihuasi (Ocotavi)"}}
-        ]}
-        
-    ];
-    
-    var json_data=JSON.parse( JSON.stringify( data))[0].features;
-    for (let index = 0; index < json_data.length; index++) {
-
-      let titulos_linea = JSON.parse( JSON.stringify( json_data[index].properties.name)); 
-      this.opcion_subestacion.push( { name: titulos_linea } );
+    //await this.mostrar_loading();
+    this.mantenimiento_servicio.get_subestaciones().subscribe(data=>{
       
-      this.select_subestacion.push( titulos_linea  );
+      this.ocultar_loading();
+      //this.lista_detalle_linea=JSON.parse(JSON.stringify(data)).datos;
+      //let data_aux =JSON.parse(JSON.stringify(data)).datos[0].subestaciones;
+      this.lista_subestacion = JSON.parse(JSON.stringify(data)).datos[0].subestaciones;
+      
+      // this.lista_detalle_linea=JSON.parse(JSON.stringify(data)).datos[0].subestaciones;
+      //console.log("lista subestaciones ",JSON.parse(this.lista_subestacion)[0].features);
+      
+      var json_data=JSON.parse(this.lista_subestacion)[0].features;
+      for (let index = 0; index < json_data.length; index++) {
+  
+        let titulos_linea = JSON.parse( JSON.stringify( json_data[index].properties.name)); 
+        this.opcion_subestacion.push( { name: titulos_linea } );
+        
+        this.select_subestacion.push( titulos_linea  );
+  
+        const image ="./assets/icon/subestacion4.png";
+        let myLatlng = new google.maps.LatLng(json_data[index].geometry.coordinates[1],json_data[index].geometry.coordinates[0]);
+        let marker = new google.maps.Marker({
+          position: myLatlng,
+          title:"Hello World!",
+          icon: image,
+        });
+        marker.setMap(this.map);
+  
+        const infoWindow = new google.maps.InfoWindow({
+          content: "",
+          disableAutoPan: true,
+        });
+  
+        marker.addListener("click", () => {
+  
+          let titulo_aux='';
+          titulo_aux=titulos_linea+'<br>';
+          let lista_archivos=JSON.parse(JSON.stringify(json_data[index].archivos))
+          for (let index = 0; index < lista_archivos.length; index++) {
+            titulo_aux +='<br><a href="https://appscada.endetransmision.bo/sis_scada/vista/unifilares/'+lista_archivos[index].name+'.pdf" target="_blank">Unifilar '+lista_archivos[index].name+'</a><br>'
+            
+          }
+  
+          infoWindow.setContent(titulo_aux);
+            infoWindow.open(this.map, marker);
+        });
+  
+  
+      }
+     
+    },error=>{
 
-      const image ="./assets/icon/subestacion4.png";
-      let myLatlng = new google.maps.LatLng(json_data[index].geometry.coordinates[1],json_data[index].geometry.coordinates[0]);
-      let marker = new google.maps.Marker({
-        position: myLatlng,
-        title:"Hello World!",
-        icon: image,
-      });
-      marker.setMap(this.map);
+      console.log("ver errores ",JSON.stringify(error));
+      this.ocultar_loading();
+      return [];
 
-      const infoWindow = new google.maps.InfoWindow({
-        content: "",
-        disableAutoPan: true,
-      });
-
-      marker.addListener("click", () => {
-        infoWindow.setContent(titulos_linea);
-          infoWindow.open(this.map, marker);
-      });
-
-
-    }
+    }) 
 
   }
   buscar_subestacion(){
-
+/*
     let data=[
+
       {"type":"FeatureCollection", "features":[
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.65650068496544,-21.99921948187739,0]},"properties":{"name":"Punto Frontera BOL-ARG"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.30982441009712,-22.708083813733,0]},"properties":{"name":"SE Bermejo"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.61058017326934,-21.71813902449356,0]},"properties":{"name":"SE Angostura"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.75045899651332,-17.17824670233878,0]},"properties":{"name":"SE San Jose"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.11641536032718,-17.4278307015434,0]},"properties":{"name":"SE Valle Hermoso"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.442465889723,-17.00993316515525,0]},"properties":{"name":"SE Villa Tunari"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.16118274339239,-16.99904057863463,0]},"properties":{"name":"SE Chimore"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.04470448002493,-17.96952301957552,0]},"properties":{"name":"SE Vinto"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.28274648659279,-19.05300348244362,0]},"properties":{"name":"SE Aranjuez"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.52663221618302,-17.21179368194152,0]},"properties":{"name":"SE Carrasco"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.51930182090764,-17.2007158622496,0]},"properties":{"name":"SE Entre Rios"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.51573972644422,-17.19625142230912,0]},"properties":{"name":"SE Entre Rios II"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.23099774556704,-20.93216724284703,0]},"properties":{"name":"SE Atocha"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.22426213172135,-20.94412788941596,0]},"properties":{"name":"SE Telamayu"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.80680508186643,-18.24082858548265,0]},"properties":{"name":"SE Cataricagua"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.56053582350246,-15.84446656251573,0]},"properties":{"name":"SE Caranavi"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.5760187386107,-18.41068892581163,0]},"properties":{"name":"SE Catavi"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.80058309235481,-19.60758270695044,0]},"properties":{"name":"SE Potosi (Agua Dulce)"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.29306478191168,-17.73174721832912,0]},"properties":{"name":"SE  Irpa Irpa"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.72197744355935,-19.55192277952019,0]},"properties":{"name":"SE Karachipampa"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.83507021420866,-16.28616817016817,0]},"properties":{"name":"SE Chuspipata"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.70756681789027,-19.48221677058557,0]},"properties":{"name":"SE Ecebol Potosi"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.35067595797864,-20.75440224493677,0]},"properties":{"name":"Transición Aéreo / Subterráneo (salar)"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.36429307436651,-20.5805707358719,0]},"properties":{"name":"SE Salar"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.27639329576006,-17.39645218091049,0]},"properties":{"name":"SE Jeruyo"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.22106283175049,-17.57774127243723,0]},"properties":{"name":"SE Santivañez II"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.14655587160836,-17.53450316371041,0]},"properties":{"name":"SE Warnes"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.15654066334618,-21.13371478482723,0]},"properties":{"name":"SE Litio"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-68.16971779857461,-16.69116579947541,0]},"properties":{"name":"SE Mazocruz"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.21750280535679,-18.06508621530076,0]},"properties":{"name":"SE Las Brechas"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.10949436549211,-17.81167816310012,0]},"properties":{"name":"SE Pagador"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-68.3606514821168,-16.64595986127971,0]},"properties":{"name":"SE Contorno Bajo"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.18855229952105,-15.94547263607925,0]},"properties":{"name":"SE Guarayos"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.79571638865379,-14.83594121707191,0]},"properties":{"name":"SE El Paraiso"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.75469016004978,-21.42634908071289,0]},"properties":{"name":"SE Torre Huayco"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.1423253942143,-18.38404025694166,0]},"properties":{"name":"SE El Dorado"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.80310371547188,-20.56388879458373,0]},"properties":{"name":"SE Uyuni"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.76664045540736,-20.57089979467764,0]},"properties":{"name":"SE Solar Uyuni"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.6859576720347,-19.52044424290286,0]},"properties":{"name":"SE La Plata"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-62.8532106259545,-17.82243754836708,0]},"properties":{"name":"SE San Julián"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-62.640538141748,-17.06145754036263,0]},"properties":{"name":"SE Los Troncos"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.89320442614581,-17.39370877302568,0]},"properties":{"name":"SE Yapacani"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.54230710537596,-17.38971896463691,0]},"properties":{"name":"SE Las Lomas"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.28223511540872,-17.57502269773241,0]},"properties":{"name":"SE La Bélgica"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.77307819353878,-17.15721169289018,0]},"properties":{"name":"SE Miguelito"}},
-        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.03646317331952,-17.71409017443765,0]},"properties":{"name":"SE Caihuasi (Ocotavi)"}}
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.23627694975214,-17.74255551455612,0]},"properties":{"name":"SE Urubo"},"archivos":[{name:"SE Urubo 230_115"},{name:"SE Urubo 230_69"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.72193388471341,-21.44950828771011,0]},"properties":{"name":"SE Tupiza"},"archivos":[{name:"SE Tupiza"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.21847198692006,-19.00088550870025,0]},"properties":{"name":"SE Sucre"},"archivos":[{name:"SE Sucre"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.13995154337435,-20.05059748438238,0]},"properties":{"name":"SE Punutuma"},"archivos":[{name:"SE Punutuma 230_115"},{name:"SE Punutuma 230_69"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.77234054493482,-16.412250961714,0]},"properties":{"name":"SE Pichu"},"archivos":[{name:"SE Pichu"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.98080057831595,-17.38458542042085,0]},"properties":{"name":"SE Sacaba"},"archivos":[{name:"SE Sacaba"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.28578791142365,-17.6277711372771,0]},"properties":{"name":"SE Qollpana"},"archivos":[{name:"SE Qollpana"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.85063585940637,-17.5077321322802,0]},"properties":{"name":"SE Paracaya"},"archivos":[{name:"SE Paracaya"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.83784644905725,-18.87876117774164,0]},"properties":{"name":"SE Ocuri"},"archivos":[{name:"SE Ocurí"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-68.18180296486392,-16.56601336856962,0]},"properties":{"name":"SE Kenko"},"archivos":[{name:"SE Kenko"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.97668977974288,-16.04132793320863,0]},"properties":{"name":"SE Huaji"},"archivos":[{name:"SE Huaji"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.15276078076599,-17.78673877209297,0]},"properties":{"name":"SE Guaracachi"},"archivos":[{name:"SE Guaracachi"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.43690873629839,-17.77322147941086,0]},"properties":{"name":"SE Solar Oruro"},"archivos":[{name:"SE Solar Oruro"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.8801894161961,-15.50397609772034,0]},"properties":{"name":"SE Guanay"},"archivos":[{name:"SE Guanay"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.82284045754406,-17.19174005857238,0]},"properties":{"name":"SE Santa Isabel"},"archivos":[{name:"SE Santa Isabel"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.8752372745008,-17.21259880629705,0]},"properties":{"name":"SE Corani"},"archivos":[{name:"SE Corani"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.1655210477519,-17.39288520094755,0]},"properties":{"name":"SE Central"},"archivos":[{name:"SE Central"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.09617187867339,-21.41280663996535,0]},"properties":{"name":"SE Chilcobija"},"archivos":[{name:"SE Chilcobija Portugalete"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.11464449332458,-17.38066993406774,0]},"properties":{"name":"SE Arocagua"},"archivos":[{name:"SE Arocagua"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.17400799235429,-21.16225250269989,0]},"properties":{"name":"SE Portugalete"},"archivos":[{name:"SE Chilcobija Portugalete"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.65650068496544,-21.99921948187739,0]},"properties":{"name":"Punto Frontera BOL-ARG"},"archivos":[{}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.29306478191168,-17.73174721832912,0]},"properties":{"name":"SE  Irpa Irpa"},"archivos":[{name:"SE  Irpa Irpa"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.61058017326934,-21.71813902449356,0]},"properties":{"name":"SE Angostura"},"archivos":[{name:"SE Angostura"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.28274648659279,-19.05300348244362,0]},"properties":{"name":"SE Aranjuez"},"archivos":[{name:"SE Aranjuez"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.23099774556704,-20.93216724284703,0]},"properties":{"name":"SE Atocha"},"archivos":[{name:"SE Atocha"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.30982441009712,-22.708083813733,0]},"properties":{"name":"SE Bermejo"},"archivos":[{name:"SE Bermejo"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.03646317331952,-17.71409017443765,0]},"properties":{"name":"SE Caihuasi (Ocotavi)"},"archivos":[{name:"SE Caihuasi"},{name:"SE Caihuasi (Ocotavi)"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.56053582350246,-15.84446656251573,0]},"properties":{"name":"SE Caranavi"},"archivos":[{name:"SE Caranavi"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.52663221618302,-17.21179368194152,0]},"properties":{"name":"SE Carrasco"},"archivos":[{name:"SE Carrasco 500"},{name:"SE Carrasco 230 2"},{name:"SE Carrasco 230 1"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.80680508186643,-18.24082858548265,0]},"properties":{"name":"SE Cataricagua"},"archivos":[{name:"SE Cataricagua"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.5760187386107,-18.41068892581163,0]},"properties":{"name":"SE Catavi"},"archivos":[{name:"SE Catavi"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.16118274339239,-16.99904057863463,0]},"properties":{"name":"SE Chimore"},"archivos":[{name:"SE Chimore"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.83507021420866,-16.28616817016817,0]},"properties":{"name":"SE Chuspipata"},"archivos":[{name:"SE Chuspipata"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-68.3606514821168,-16.64595986127971,0]},"properties":{"name":"SE Contorno Bajo"},"archivos":[{name:"SE Contorno Bajo"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.70756681789027,-19.48221677058557,0]},"properties":{"name":"SE Ecebol Potosi"},"archivos":[{name:"SE Ecebol Potosí"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.1423253942143,-18.38404025694166,0]},"properties":{"name":"SE El Dorado"},"archivos":[{name:"SE El Dorado"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.79571638865379,-14.83594121707191,0]},"properties":{"name":"SE El Paraíso"},"archivos":[{name:"SE El Paraíso"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.51930182090764,-17.2007158622496,0]},"properties":{"name":"SE Entre Rios"},"archivos":[{name:"SE Entre Rios 1"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.51573972644422,-17.19625142230912,0]},"properties":{"name":"SE Entre Rios II"},"archivos":[{name:"SE Entre Rios 2"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.18855229952105,-15.94547263607925,0]},"properties":{"name":"SE Guarayos"},"archivos":[{name:"SE Guarayos 1"},{name:"SE Guarayos 2"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.27639329576006,-17.39645218091049,0]},"properties":{"name":"SE Jeruyo"},"archivos":[{name:"SE Jeruyo"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.72197744355935,-19.55192277952019,0]},"properties":{"name":"SE Karachipampa"},"archivos":[{name:"SE Karachipampa"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.28223511540872,-17.57502269773241,0]},"properties":{"name":"SE Bélgica"},"archivos":[{name:"SE Bélgica 1"},{name:"SE Bélgica 2"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.6859576720347,-19.52044424290286,0]},"properties":{"name":"SE La Plata"},"archivos":[{name:"SE La Plata"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.21750280535679,-18.06508621530076,0]},"properties":{"name":"SE Las Brechas"},"archivos":[{name:"SE Las Brechas 230_69"},{name:"SE Las Brechas 230_115"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.54230710537596,-17.38971896463691,0]},"properties":{"name":"SE Las Lomas"},"archivos":[{name:"SE Las Lomas"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.15654066334618,-21.13371478482723,0]},"properties":{"name":"SE Litio"},"archivos":[{name:"SE Litio"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-62.640538141748,-17.06145754036263,0]},"properties":{"name":"SE Troncos"},"archivos":[{name:"SE Los Troncos 1"},{name:"SE Los Troncos 2"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-68.16971779857461,-16.69116579947541,0]},"properties":{"name":"SE Mazocruz"},"archivos":[{name:"SE Mazocruz 115"},{name:"SE Mazocruz 230"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.77307819353878,-17.15721169289018,0]},"properties":{"name":"SE Miguelito"},"archivos":[{name:"SE Miguelito"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.10949436549211,-17.81167816310012,0]},"properties":{"name":"SE Pagador"},"archivos":[{name:"SE Pagador"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.80058309235481,-19.60758270695044,0]},"properties":{"name":"SE Potosi (Agua Dulce)"},"archivos":[{name:"SE Potosí 69"},{name:"SE Potosí 115"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.36429307436651,-20.5805707358719,0]},"properties":{"name":"SE Salar"},"archivos":[{name:"SE Salar"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.75045899651332,-17.17824670233878,0]},"properties":{"name":"SE San José"},"archivos":[{name:"SE San José"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-62.8532106259545,-17.82243754836708,0]},"properties":{"name":"SE San Julián"},"archivos":[{name:"SE San Julián"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.22106283175049,-17.57774127243723,0]},"properties":{"name":"SE Santivañez 2"},"archivos":[{name:"SE Santivañez 2 230"},{name:"SE Santivañez 2 500"},{name:"SE Santivañez ISA"},{name:"SE Santivañez OMA"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.76664045540736,-20.57089979467764,0]},"properties":{"name":"SE Solar Uyuni"},"archivos":[{}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.22426213172135,-20.94412788941596,0]},"properties":{"name":"SE Telamayu"},"archivos":[{name:"SE Telamayu"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.75469016004978,-21.42634908071289,0]},"properties":{"name":"SE Torre Huayco"},"archivos":[{name:"SE Torrehuaycu"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.80310371547188,-20.56388879458373,0]},"properties":{"name":"SE Uyuni"},"archivos":[{name:"SE Uyuni"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.11641536032718,-17.4278307015434,0]},"properties":{"name":"SE Valle Hermoso"},"archivos":[{name:"SE Valle Hermoso 115"},{name:"SE Valle Hermoso 230"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.442465889723,-17.00993316515525,0]},"properties":{"name":"SE Villa Tunari"},"archivos":[{name:"SE Villa Tunari"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.04470448002493,-17.96952301957552,0]},"properties":{"name":"SE Vinto"},"archivos":[{name:"SE Vinto 69"},{name:"SE Vinto 115"},{name:"SE Vinto 230"},{name:"SE Vinto Banco Serie"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.14655587160836,-17.53450316371041,0]},"properties":{"name":"SE Warnes"},"archivos":[{name:"SE Warnes 230"},{name:"SE Warnes 230_115"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.89320442614581,-17.39370877302568,0]},"properties":{"name":"SE Yapacani"},"archivos":[{name:"SE Yapacaní"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.35067595797864,-20.75440224493677,0]},"properties":{"name":"Transición Aéreo / Subterráneo (salar)"},"archivos":[{}]},
+
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.26298671355819,-17.31382803452464,0]},"properties":{"name":"SE Misicuni"},"archivos":[{}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.8330140576514,-18.27634732030209,0]},"properties":{"name":"SE Lucianita"},"archivos":[{name:"SE Lucianita"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.61464303671856,-14.34009449794547,0]},"properties":{"name":"SE San Buenaventura"},"archivos":[{name:"SE San Buenaventura"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.5194015166587,-19.97867823421911,0]},"properties":{"name":"SE Camiri"},"archivos":[{name:"SE Camiri"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-68.11824064865246,-16.39997702711393,0]},"properties":{"name":"SE Cumbre"},"archivos":[{name:"SE La Cumbre"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.21082301651822,-21.15797039800511,0]},"properties":{"name":"SE Las Carreras"},"archivos":[{name:"SE Las Carreras 230_24,9"},{name:"SE Las Carreras 230"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.94157943212551,-19.79086401709636,0]},"properties":{"name":"SE Monteagudo"},"archivos":[{name:"SE Monteagudo"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.30581164912662,-19.32122334337472,0]},"properties":{"name":"SE Padilla"},"archivos":[{name:"SE Padilla"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.9226619302411,-16.57396353560015,0]},"properties":{"name":"SE Palca"},"archivos":[{name:"SE Palca 115"},{name:"SE Palca 230"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.77009071549523,-14.90529100978015,0]},"properties":{"name":"SE San Borja"},"archivos":[{name:"SE San Borja"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-65.63059127073012,-15.00066233065483,0]},"properties":{"name":"SE San Ignacio de Moxos"},"archivos":[{name:"SE San Ignacio de Moxos"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-66.22082771192414,-17.57341246210078,0]},"properties":{"name":"SE Santivañez (ENDE)"},"archivos":[{name:"SE Santivañez (ENDE) OMA"},{name:"SE Santivañez (ENDE) 230-115"},{name:"SE Santivañez 2 230"},{name:"SE Santivañez 2 500"},{name:"SE Santivañez 230_115"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.7279311197185,-21.48606280099611,0]},"properties":{"name":"SE Tarija"},"archivos":[{name:"SE Tarija"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-64.89294290265074,-14.85328069327243,0]},"properties":{"name":"SE Trinidad"},"archivos":[{name:"SE Trinidad"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-63.56206899537223,-21.69290594146887,0]},"properties":{"name":"SE Yaguacua"},"archivos":[{name:"SE Yaguacua 230_132"},{name:"SE Yaguacua 230_69"}]},
+        {"type":"Feature","geometry":{"type":"Point","coordinates":[-67.02229117355603,-15.14319954556035,0]},"properties":{"name":"SE Yucumo"},"archivos":[{name:"SE Yucumo"}]}
+
         ]}
         
+
+        
     ];
+    */
+
+    //let data = this.GetSubestacion();
     
-    var json_data=JSON.parse( JSON.stringify( data))[0].features;
+    var json_data=JSON.parse(this.lista_subestacion)[0].features;
 
     //console.log('sub seleccionado',this.select_subestacion);
     
     for (let index = 0; index < json_data.length; index++) {
 
-      let titulos_linea = JSON.parse( JSON.stringify( json_data[index].properties.name)); 
+      let titulos_linea = JSON.parse(JSON.stringify(json_data[index].properties.name)); 
+      // let aux=titulos_linea;
+      // aux=aux+'<ion-buttons slot="end">';
+      // aux=aux+'<ion-button (click)="abrir_pdf('+aux+'.pdf)">';
+      // aux=aux+'<ion-icon slot="icon-only" name="trash"';
+      // aux=aux+'color="danger"></ion-icon>';
+      // aux=aux+'</ion-button>'; 
+      // aux=aux+'</ion-buttons>';   
 
       //console.info( "econtrado "+titulos_linea+"= " ,this.select_subestacion.includes( titulos_linea ) ); // true
 
-      if(this.select_subestacion.includes( titulos_linea ) || this.seleccionar_todo_subestacion=='undefined' ){
+      if(this.select_subestacion.includes(titulos_linea) || this.seleccionar_todo_subestacion=='undefined' ){
         const image ="./assets/icon/subestacion4.png";
 
         let myLatlng = new google.maps.LatLng(json_data[index].geometry.coordinates[1],json_data[index].geometry.coordinates[0]);
@@ -1322,10 +1555,22 @@ export class LineasPage implements OnInit {
           content: "",
           disableAutoPan: true,
         });
-  
+   
+
         marker.addListener("click", () => {
-          infoWindow.setContent(titulos_linea);
-            infoWindow.open(this.map, marker);
+
+          
+        
+          //titulos_linea = titulos_linea+'<br><a href="https://appscada.endetransmision.bo/sis_scada/vista/unifilares/'+titulos_linea+'.pdf" target="_blank">Descargar Unifilar</a>';
+          let titulo_aux='';
+          titulo_aux=titulos_linea+'<br>';
+          let lista_archivos=JSON.parse(JSON.stringify(json_data[index].archivos))
+          for (let index = 0; index < lista_archivos.length; index++) {
+            titulo_aux +='<br><a href="https://appscada.endetransmision.bo/sis_scada/vista/unifilares/'+lista_archivos[index].name+'.pdf" target="_blank">Unifilar '+lista_archivos[index].name+'</a><br>'
+            
+          }
+          infoWindow.setContent(titulo_aux);
+          infoWindow.open(this.map, marker);
         });
       }
       else{
@@ -1337,6 +1582,14 @@ export class LineasPage implements OnInit {
     }
 
   }
+
+  abrir_pdf(url){
+
+    console.log("lleog al pdf",url);
+    this.pdfLink = this.sanitizer.bypassSecurityTrustResourceUrl('http://docs.google.com/gview?embedded=true&url='+url); 
+
+  }
+  
   abrir_filtros_detalle_linea(dato:number){
 
     this.lista_detalle_linea_seleccionado=[];

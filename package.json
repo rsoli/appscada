@@ -41,6 +41,7 @@
     "cordova-plugin-nativestorage": "^2.3.2",
     "cordova-sqlite-storage": "^6.0.0",
     "localforage-cordovasqlitedriver": "^1.8.0",
+    "moment": "^2.29.4",
     "onesignal-cordova-plugin": "^2.11.4",
     "pxp-client": "^2.1.27",
     "rxjs": "~6.6.0",

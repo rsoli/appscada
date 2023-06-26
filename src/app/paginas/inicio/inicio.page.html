@@ -52,11 +52,23 @@
                     <ion-img class="img_menu"  src="./assets/icon/alto-voltaje.png"></ion-img>
                   </div>
                   <div class="text_menu">
-                    Fallas
+                    Eventos 
                   </div>
               </div>
             </div>
-          </ion-col>
+          </ion-col> 
+          <!-- <ion-col size="6">
+            <div class="btnprincipal" >
+              <div  class="btnprincipal2" routerLink="/eventos">
+                  <div>
+                    <ion-img class="img_menu"  src="./assets/icon/alto-voltaje.png"></ion-img>
+                  </div>
+                  <div class="text_menu">
+                    Eventos
+                  </div>
+              </div>
+            </div>
+          </ion-col> -->
 
           <ion-col size="6">
             <div class="btnprincipal" >
@@ -115,46 +127,16 @@
           </ion-col>
           <ion-col size="6">
             <div class="btnprincipal" >
-              <div  class="btnprincipal2" routerLink="/eventos">
+              <div  class="btnprincipal2" routerLink="/unifilares">
                 <div>
-                  <ion-img class="img_menu"  src="./assets/icon/evento.png"></ion-img>
-                </div>
-                <div class="text_menu" >
-                  Eventos
-                </div>
-              </div>
-            </div>
-          </ion-col>
-        </ion-row>
-  
-
-
-
-        <ion-row>
-          <ion-col size="6">
-            <div class="btnprincipal" >
-              <div  class="btnprincipal2" routerLink="/clima">
-                <div>
-                  <ion-img class="img_menu" src="./assets/icon/clima.png"></ion-img>
+                  <ion-img class="img_menu" src="./assets/icon/conexion.png"></ion-img>
                 </div>
                 <div class="text_menu">
-                  Clima
+                  Conexión
                 </div>
               </div>
             </div>
           </ion-col>
-          <!-- <ion-col size="6">
-            <div class="btnprincipal" >
-              <div  class="btnprincipal2" routerLink="/eventos">
-                <div>
-                  <ion-img class="img_menu"  src="./assets/icon/evento.png"></ion-img>
-                </div>
-                <div class="text_menu" >
-                  Eventos
-                </div>
-              </div>
-            </div>
-          </ion-col> -->
         </ion-row>
         
       </ion-grid>
@@ -162,40 +144,5 @@
     </ion-list>
 
   </div>
-
-<!-- <br><br><br><br><br>
-<br><br><br><br><br>
-<br><br><br><br><br>
-<br><br><br><br><br>
-<ion-list>
-
-  <ion-list-header>
-    <ion-label>UserID</ion-label>
-  </ion-list-header>
-
-  <ion-item>
-    <ion-label>{{pushService.UserID}}</ion-label>
-  </ion-item>
-
-  <ion-list-header>
-    <ion-label>Pushes</ion-label>
-  </ion-list-header>
-
-  <ion-buttons slot="end">
-    <ion-button (click)="borrarMensajes()">
-      <ion-icon slot="icon-only" name="trash"
-      color="danger"></ion-icon>
-    </ion-button>
-  </ion-buttons>
-
-  <ion-item *ngFor="let push of pushService.mensajes ">
-    <h3>{{push.title}}</h3>
-    <p>{{push.body}}</p>
-    <p>
-      {{push.additionalData | json}}
-    </p>
-  </ion-item>
-</ion-list>   -->
-
 
 </ion-content>

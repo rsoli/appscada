@@ -43,6 +43,9 @@ export class EstadisticaPage implements OnInit {
   private tabla_linea_115=[];
   private tabla_linea_69=[];
 
+  private tabla_linea_500=[];
+  private tabla_linea_132=[];
+
   fecha_hora_actual:any;
   
   start:number=0;
@@ -102,6 +105,24 @@ export class EstadisticaPage implements OnInit {
         let linea_aux = [JSON.parse(aux.datos[0].linea_69)][0].linea[index];
         let valor_aux = [JSON.parse(aux.datos[0].linea_69)][0].valor[index];
         this.tabla_linea_69.push({linea: linea_aux,valor: valor_aux});
+      }
+      // armado de tabla 500
+      this.tabla_linea_500=[];
+      let linea_500_length = [JSON.parse(aux.datos[0].linea_500)][0].linea.length;
+     
+      for (let index = 0; index < linea_500_length; index++) {
+        let linea_aux = [JSON.parse(aux.datos[0].linea_500)][0].linea[index];
+        let valor_aux = [JSON.parse(aux.datos[0].linea_500)][0].valor[index];
+        this.tabla_linea_500.push({linea: linea_aux,valor: valor_aux});
+      }
+      // armado de tabla 132
+      this.tabla_linea_132=[];
+      let linea_132_length = [JSON.parse(aux.datos[0].linea_132)][0].linea.length;
+     
+      for (let index = 0; index < linea_132_length; index++) {
+        let linea_aux = [JSON.parse(aux.datos[0].linea_132)][0].linea[index];
+        let valor_aux = [JSON.parse(aux.datos[0].linea_132)][0].valor[index];
+        this.tabla_linea_132.push({linea: linea_aux,valor: valor_aux});
       }
       ////////////////////
       

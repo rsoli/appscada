@@ -46,6 +46,10 @@ const routes: Routes = [
   {
     path: 'clima',
     loadChildren: () => import('./paginas/clima/clima.module').then( m => m.ClimaPageModule)
+  },
+  {
+    path: 'unifilares',
+    loadChildren: () => import('./paginas/unifilares/unifilares.module').then( m => m.UnifilaresPageModule)
   }
 
 
