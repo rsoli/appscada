@@ -20,7 +20,7 @@ export class TurnoPage implements OnInit {
   contador_pagina:number=1;
   bandera_inicio:number=0;
   start:number=0;
-  limite:number=10;
+  limite:number=5000;
   fecha_turno:any;
 
   lista_turnos :Array<TurnoModelo>=[];
@@ -90,6 +90,8 @@ export class TurnoPage implements OnInit {
 
       this.bandera_inicio++;
       this.lista_turnos=JSON.parse(JSON.stringify(data)).datos;
+      console.log("ver turnos ",this.lista_turnos);
+      
       
       this.fecha_inicio_turno = (moment(String(this.lista_turnos[0].fecha))).format('D/M/YYYY');
      

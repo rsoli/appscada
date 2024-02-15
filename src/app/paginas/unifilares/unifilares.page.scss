@@ -90,8 +90,171 @@ ion-datetime{
     display: inline-block;
     text-align: center;
 }
-.texto-encima{
+// tartagal
+.tar-arg-p{
     position: absolute;
-    top: 40px;
-    left: 55px;
+    top: 8%;
+    left: 25%;
+    // transform: translate(-50%, -50%);
+    font-size: 4vw !important;
+    text-align: left;
+}
+.tar-arg-q{
+    position: absolute;
+    top: 10.7%;
+    left: 25%;
+    // transform: translate(-50%, -50%);
+    font-size: 4vw !important;
+    text-align: left;
+}
+.tar-arg-u{
+    position: absolute;
+    top: 13%;
+    left: 25%;
+    // transform: translate(-50%, -50%);
+    font-size: 4vw !important;
+    text-align: left;
+}
+.tar-arg-freq{
+    position: absolute;
+    top: 15.3%;
+    left: 25%;
+    // transform: translate(-50%, -50%);
+    font-size: 4vw !important;
+    text-align: left;
+}
+.tar-arg-1dt02{
+    position: absolute;
+    top: 11.5%;
+    left: 48.9%;
+    width: 5.1%;
+    height: 3%;
+    border: rgba(255, 242, 0, 0.744) 3px solid;
+    background: white;
+}
+.tar-arg-a732{
+    position: absolute;
+    top: 38.9%;
+    left: 48.9%;
+    width: 5.1%;
+    height: 3%;
+    border: rgba(255, 242, 0, 0.744) 3px solid;
+    background: white;
+}
+.tar-arg-z739{
+    position: absolute;
+    top: 60.6%;
+    left: 48.9%;
+    width: 5.1%;
+    height: 3%;
+    border: rgba(255, 242, 0, 0.744) 3px solid;
+    background: white;
+}
+
+// yaguacua
+
+.yag-p{
+    position: absolute;
+    top: 34.4%;
+    left: 25%;
+    // transform: translate(-50%, -50%);
+    font-size: 4vw !important;
+    text-align: left;
+}
+.yag-q{
+    position: absolute;
+    top: 36.9%;
+    left: 25%;
+    // transform: translate(-50%, -50%);
+    font-size: 4vw !important;
+    text-align: left;
+}
+.yag-u{
+    position: absolute;
+    top: 39.3%;
+    left: 25%;
+    // transform: translate(-50%, -50%);
+    font-size: 4vw !important;
+    text-align: left;
+}
+.yag-freq{
+    position: absolute;
+    top: 41.6%;
+    left: 25%;
+    // transform: translate(-50%, -50%);
+    font-size: 4vw !important;
+    text-align: left;
+}
+
+// sur 30 ----------------------------------------
+.sur-30-p{
+    position: absolute;
+    top: 79.6%;
+    left: 3%;
+    font-size: 4vw !important;
+    text-align: left;
+}
+.sur-30-q{
+    position: absolute;
+    top: 82%;
+    left: 3%;
+    font-size: 4vw !important;
+    text-align: left;
+}
+// sur 31 ----------------------------------------
+.sur-31-p{
+    position: absolute;
+    top: 79.6%;
+    left: 36%;
+    font-size: 4vw !important;
+    text-align: left;
+}
+.sur-31-q{
+    position: absolute;
+    top: 82%;
+    left: 36%;
+    font-size: 4vw !important;
+    text-align: left;
+}
+// sur 32 ------------------------------------
+.sur-32-p{
+    position: absolute;
+    top: 79.6%;
+    left: 69.7%;
+    font-size: 4vw !important;
+    text-align: left;
+}
+.sur-32-q{
+    position: absolute;
+    top: 82%;
+    left: 69.7%;
+    font-size: 4vw !important;
+    text-align: left;
+}
+
+.sur_mw{
+    position: absolute;
+    top: 79.6%;
+    left: 90.2%;
+    font-size: 3vw !important;
+    text-align: left;
+}
+.sur_mvar{
+    position: absolute;
+    top: 82%;
+    left: 90.2%;
+    font-size: 3vw !important;
+    text-align: left;
+}
+.contenedor {
+    width: 100% !important;
+    height: auto !important;
+}
+.cerrado{
+    display: none;
+    visibility: hidden;
+}
+.abierto{
+    display: block;
+    visibility: visible;
 }

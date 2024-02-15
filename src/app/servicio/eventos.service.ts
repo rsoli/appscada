@@ -64,5 +64,18 @@ export class EventosService {
     }
    
   }
+  get_yaguacua_argentina(start:number,limit:number){ 
+
+    try {
+      this.actualizar_accesos();
+      let parametros = '?start='+start+'&limit='+limit;
+      
+      return this.http.post(this.baseURL + 'listaArgentina'+parametros, {}, {headers:this.headers_token} );
+
+    } catch (error) {
+      console.log("ver erores ",error);
+    }
+   
+  }
 
 }

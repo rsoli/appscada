@@ -26,12 +26,63 @@
 </ion-header>
 
 <ion-content>
-  <div class="contenedor" style="width: 100%;">
-    <img src="/assets/imagenes_unifilares/Punto_Frontera_BOL-ARG.png" alt="">
-    <div class="texto-encima">
+    <!-- <div class="col-md-6 " id="contenedor">
+      <ion-img src="/assets/imagenes_unifilares/unifi2.svg"></ion-img>
+      <div class="texto-encima">
+        1231
+      </div> 
+    </div> -->
 
-        12312  <----- Potencia activa ---> 123123 
+
+    <div class="contenedor" >
+    
+      <img src="/assets/imagenes_unifilares/unifi8.svg" />
+    
+      <div class="tar-arg-p">{{tar_arg_p}} MW</div>
+      <div class="tar-arg-q">{{tar_arg_q}} MVAr</div>
+      <div class="tar-arg-u">{{tar_arg_u}} kV</div>
+      <div class="tar-arg-freq">{{tar_arg_freq}} Hz</div>
+
+      <div class="tar-arg-1dt02" [ngClass]="{'abierto' : tar_arg_1dt02===true,'cerrado' : tar_arg_1dt02===false }"></div>
+      <div class="tar-arg-a732"  [ngClass]="{'abierto' : tar_arg_a732===true,'cerrado' : tar_arg_a732===false }" ></div>
+      <div class="tar-arg-z739"  [ngClass]="{'abierto' : tar_arg_z739===true,'cerrado' : tar_arg_z739===false }"></div>
+
+      <div class="yag-p">{{yag_p}} MW</div>
+      <div class="yag-q">{{yag_q}} MVAr</div>
+      <div class="yag-u">{{yag_u}} kV</div>
+      <div class="yag-freq">{{yag_freq}} Hz</div>
+
+      <div class="sur-30-p">{{sur_30_p}}</div>
+      <div class="sur-30-q">{{sur_30_q}}</div>
+
+      <div class="sur-31-p">{{sur_31_p}}</div>
+      <div class="sur-31-q">{{sur_31_q}}</div>
+
+      <div class="sur-32-p">{{sur_32_p}}</div>
+      <div class="sur-32-q">{{sur_32_q}}</div>
+
+      <div class="sur_mw">MW</div>
+      <div class="sur_mvar">MVAr</div>
+
+      <!-- <div class="centrado">Centrado</div> -->
     </div>
-  </div>
+
+
+    <!-- <img src="/assets/imagenes_unifilares/Punto_Frontera_BOL-ARG.png" alt="Planets"
+usemap="#planetmap"> -->
+
+    <!-- <div class="texto-encima">
+
+        12312  ----- Potencia activa --- 123123 
+    </div> 
+  -->
+  <!-- <map name="planetmap" style="display: inline !important;">
+    <area shape="circle" coords="50,44,270,350" width="10" height="10"  href="https://w7.pngwing.com/pngs/409/413/png-transparent-map-drawing-pin-map-marker-thumbnail.png" alt="Sun">
+
+  </map> -->
+  
+  <!-- <canvas #myCanvas ></canvas> -->
+
+
 
 </ion-content>
