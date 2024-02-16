@@ -94,7 +94,7 @@ ion-datetime{
 .tar-arg-p{
     position: absolute;
     top: 8%;
-    left: 25%;
+    left: 23%;
     // transform: translate(-50%, -50%);
     font-size: 4vw !important;
     text-align: left;
@@ -102,7 +102,7 @@ ion-datetime{
 .tar-arg-q{
     position: absolute;
     top: 10.7%;
-    left: 25%;
+    left: 23%;
     // transform: translate(-50%, -50%);
     font-size: 4vw !important;
     text-align: left;
@@ -110,7 +110,7 @@ ion-datetime{
 .tar-arg-u{
     position: absolute;
     top: 13%;
-    left: 25%;
+    left: 23%;
     // transform: translate(-50%, -50%);
     font-size: 4vw !important;
     text-align: left;
@@ -118,15 +118,15 @@ ion-datetime{
 .tar-arg-freq{
     position: absolute;
     top: 15.3%;
-    left: 25%;
+    left: 23%;
     // transform: translate(-50%, -50%);
     font-size: 4vw !important;
     text-align: left;
 }
 .tar-arg-1dt02{
     position: absolute;
-    top: 11.5%;
-    left: 48.9%;
+    top: 11.3%;
+    left: 47.5%;
     width: 5.1%;
     height: 3%;
     border: rgba(255, 242, 0, 0.744) 3px solid;
@@ -134,8 +134,8 @@ ion-datetime{
 }
 .tar-arg-a732{
     position: absolute;
-    top: 38.9%;
-    left: 48.9%;
+    top: 38.2%;
+    left: 47.5%;
     width: 5.1%;
     height: 3%;
     border: rgba(255, 242, 0, 0.744) 3px solid;
@@ -143,8 +143,8 @@ ion-datetime{
 }
 .tar-arg-z739{
     position: absolute;
-    top: 60.6%;
-    left: 48.9%;
+    top: 59.7%;
+    left: 47.5%;
     width: 5.1%;
     height: 3%;
     border: rgba(255, 242, 0, 0.744) 3px solid;
@@ -156,7 +156,7 @@ ion-datetime{
 .yag-p{
     position: absolute;
     top: 34.4%;
-    left: 25%;
+    left: 23%;
     // transform: translate(-50%, -50%);
     font-size: 4vw !important;
     text-align: left;
@@ -164,7 +164,7 @@ ion-datetime{
 .yag-q{
     position: absolute;
     top: 36.9%;
-    left: 25%;
+    left: 23%;
     // transform: translate(-50%, -50%);
     font-size: 4vw !important;
     text-align: left;
@@ -172,7 +172,7 @@ ion-datetime{
 .yag-u{
     position: absolute;
     top: 39.3%;
-    left: 25%;
+    left: 23%;
     // transform: translate(-50%, -50%);
     font-size: 4vw !important;
     text-align: left;
@@ -180,7 +180,7 @@ ion-datetime{
 .yag-freq{
     position: absolute;
     top: 41.6%;
-    left: 25%;
+    left: 23%;
     // transform: translate(-50%, -50%);
     font-size: 4vw !important;
     text-align: left;
@@ -190,14 +190,14 @@ ion-datetime{
 .sur-30-p{
     position: absolute;
     top: 79.6%;
-    left: 3%;
+    left: 2%;
     font-size: 4vw !important;
     text-align: left;
 }
 .sur-30-q{
     position: absolute;
     top: 82%;
-    left: 3%;
+    left: 2%;
     font-size: 4vw !important;
     text-align: left;
 }
@@ -205,14 +205,14 @@ ion-datetime{
 .sur-31-p{
     position: absolute;
     top: 79.6%;
-    left: 36%;
+    left: 35%;
     font-size: 4vw !important;
     text-align: left;
 }
 .sur-31-q{
     position: absolute;
     top: 82%;
-    left: 36%;
+    left: 35%;
     font-size: 4vw !important;
     text-align: left;
 }
@@ -220,14 +220,14 @@ ion-datetime{
 .sur-32-p{
     position: absolute;
     top: 79.6%;
-    left: 69.7%;
+    left: 67%;
     font-size: 4vw !important;
     text-align: left;
 }
 .sur-32-q{
     position: absolute;
     top: 82%;
-    left: 69.7%;
+    left: 67%;
     font-size: 4vw !important;
     text-align: left;
 }
@@ -235,14 +235,14 @@ ion-datetime{
 .sur_mw{
     position: absolute;
     top: 79.6%;
-    left: 90.2%;
+    left: 89.2%;
     font-size: 3vw !important;
     text-align: left;
 }
 .sur_mvar{
     position: absolute;
     top: 82%;
-    left: 90.2%;
+    left: 89.2%;
     font-size: 3vw !important;
     text-align: left;
 }
@@ -250,6 +250,9 @@ ion-datetime{
     width: 100% !important;
     height: auto !important;
 }
+//  ion-content{
+//       --background: #e51111 !important;
+//  }
 .cerrado{
     display: none;
     visibility: hidden;

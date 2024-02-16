@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 //import { ViewChild, ElementRef } from '@angular/core';
 import { EventosService } from '../../servicio/eventos.service';
-
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-unifilares',
@@ -43,18 +43,48 @@ export class UnifilaresPage implements OnInit {
     sur_32_p:string='';
     sur_32_q:string='';
     
+    ejecucion_automatica:any;
+    loading: HTMLIonLoadingElement;
 
   constructor(
     private evento_servicio:EventosService,
+    private loadingController:LoadingController,
   ) { }
 
-  ngOnInit() {
-
+  async ngOnInit() {
+    await this.mostrar_loading();
     this.get_yaguacua_argentina_servicio();
-    // this.ejecutarTiempo();
+    this.ejecutarTiempo();
 
   }
+  async mostrar_loading() {
+    this.loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Cargando ...',
+    });
+    await this.loading.present();
+  }
+  ejecutarTiempo(){
+
+  
+    this.ejecucion_automatica = setInterval( () => {
+         try {
+          this.get_yaguacua_argentina_servicio();
+         } catch (error) {
+           console.log("erores timer");
+           
+         }
+         
+      
+    }, 30000);
+  }
+  ngOnDestroy() {//no es necesario invocarlo se destruye automatico en ionic
+    if (this.ejecucion_automatica) {
+      clearInterval(this.ejecucion_automatica);
+    }
+  }
   get_yaguacua_argentina_servicio(){
+    console.log("llego2");
     this.evento_servicio.get_yaguacua_argentina(this.start,this.limite).subscribe(data=>{
       this.lista_yaguacua_tartagal=[];
       let aux=JSON.parse(JSON.stringify(data)) ;
@@ -62,7 +92,7 @@ export class UnifilaresPage implements OnInit {
      
 
       let lista_argentina_tartagal = aux.datos;
-    //  console.log("llego",lista_argentina_tartagal.length);
+      console.log("llego",lista_argentina_tartagal);
       for (let index = 0; index < lista_argentina_tartagal.length; index++) {
 
         if(lista_argentina_tartagal[index].lado=='YAGUACUA-BOLIVIA' && lista_argentina_tartagal[index].componente=='P'){
@@ -139,16 +169,23 @@ export class UnifilaresPage implements OnInit {
         if(lista_argentina_tartagal[index].lado=='YAGUACUA-SUR32' && lista_argentina_tartagal[index].componente=='Q'){
           this.sur_32_q=lista_argentina_tartagal[index].valor;
         }
-      // this.ocultar_loading();
+       this.ocultar_loading();
       }
 
     },error=>{
 
       console.log("ver errores2 ",JSON.stringify(error));
-      // this.ocultar_loading();
+      this.ocultar_loading();
 
     }) 
   
+  }
+  ocultar_loading(){
+    try {
+      this.loading.dismiss();
+    } catch (error) {
+      console.log("Error al ocultar loading ",error);
+    }
   }
   ngAfterViewInit(){
 
