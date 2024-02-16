@@ -29,6 +29,15 @@ export class UnifilaresPage implements OnInit {
     tar_arg_a732:Boolean=false;
     tar_arg_z739:Boolean=false;
 
+    yag_30_2:Boolean=false;
+    yag_31_2:Boolean=false;
+    yag_32_2:Boolean=false;
+
+    yag_se_30:Boolean=false;
+    yag_se_31:Boolean=false;
+    yag_se_32:Boolean=false;
+
+
     yag_p:string='';
     yag_q:string='';
     yag_u:string='';
@@ -131,11 +140,63 @@ export class UnifilaresPage implements OnInit {
         if(lista_argentina_tartagal[index].lado=='YAGUACUA-BOLIVIA' && lista_argentina_tartagal[index].componente=='Z739'){
 
           if(lista_argentina_tartagal[index].valor==0){//logica ivertido segun scada
-            this.tar_arg_z739 = true; //cerrado logica invertido
+            this.tar_arg_z739 = false; //cerrado logica invertido
           }else{
-            this.tar_arg_z739 = false;//abierto
+            this.tar_arg_z739 = true;//abierto
           }
         }
+
+
+        if(lista_argentina_tartagal[index].lado=='YAGUACUA-EANDINA' && lista_argentina_tartagal[index].componente=='30-2'){
+
+          if(lista_argentina_tartagal[index].valor==0){//logica 
+            this.yag_30_2 = false; //cerrado 
+          }else{
+            this.yag_30_2 = true;//abierto
+          }
+        }
+        if(lista_argentina_tartagal[index].lado=='YAGUACUA-EANDINA' && lista_argentina_tartagal[index].componente=='31-2'){
+
+          if(lista_argentina_tartagal[index].valor==0){//logica 
+            this.yag_31_2 = false; //cerrado
+          }else{
+            this.yag_31_2 = true;//abierto
+          }
+        }
+        if(lista_argentina_tartagal[index].lado=='YAGUACUA-EANDINA' && lista_argentina_tartagal[index].componente=='32-2'){
+
+          if(lista_argentina_tartagal[index].valor==0){//logica 
+            this.yag_32_2 = false; //cerrado
+          }else{
+            this.yag_32_2 = true;//abierto
+          }
+        }
+
+        if(lista_argentina_tartagal[index].lado=='YAGUACUA-EANDINA' && lista_argentina_tartagal[index].componente=='SE30'){
+
+          if(lista_argentina_tartagal[index].valor==0){//logica 
+            this.yag_se_30 = false; //cerrado
+          }else{
+            this.yag_se_30 = true;//abierto
+          }
+        }
+        if(lista_argentina_tartagal[index].lado=='YAGUACUA-EANDINA' && lista_argentina_tartagal[index].componente=='SE31'){
+
+          if(lista_argentina_tartagal[index].valor==0){//logica 
+            this.yag_se_31 = false; //cerrado
+          }else{
+            this.yag_se_31 = true;//abierto
+          }
+        }
+        if(lista_argentina_tartagal[index].lado=='YAGUACUA-EANDINA' && lista_argentina_tartagal[index].componente=='SE32'){
+
+          if(lista_argentina_tartagal[index].valor==0){//logica 
+            this.yag_se_32 = false; //cerrado
+          }else{
+            this.yag_se_32 = true;//abierto
+          }
+        }
+
         if(lista_argentina_tartagal[index].lado=='TARTAGAL-ARGENTINA' && lista_argentina_tartagal[index].componente=='P'){
           this.tar_arg_p=lista_argentina_tartagal[index].valor;
         }
